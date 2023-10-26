@@ -1,0 +1,12 @@
+.profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+}

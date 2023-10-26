@@ -1,0 +1,17 @@
+:root {
+	--text-color: white;
+	--second-text-color: #42AAFF;
+	--third-text-color: #ffff;
+	--fourth-text-color: #888;
+
+	--background-color: #454255;
+	--second-background-color: #67597F;
+	--fourth-background-color: #393944;
+	
+	--button-text-color: white;
+	--button-background-color: rgb(61, 232, 61);;
+
+	--red: red;
+	--green: rgb(61, 232, 61);
+}
+

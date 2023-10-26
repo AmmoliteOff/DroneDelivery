@@ -1,0 +1,16 @@
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+
+    background-color: var(--second-background-color);
+
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.logo {
+    font-size: 30px;
+}
