@@ -1,5 +1,4 @@
 package com.hackathon.dronedelivery.model;
 
-public abstract class Drone {
-
+public class Product {
 }
