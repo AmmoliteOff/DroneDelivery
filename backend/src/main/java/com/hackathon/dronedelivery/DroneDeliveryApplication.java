@@ -9,6 +9,4 @@ public class DroneDeliveryApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DroneDeliveryApplication.class, args);
 	}
-
-
 }
