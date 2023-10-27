@@ -4,7 +4,12 @@ import { type UserModel } from "./types";
 import { loginAsync, logoutAsync } from "./asyncThunks";
 
 const initialState: UserModel = {
-    isAuth: false,
+    user: {
+        id: "1",
+        name: "Иван",
+        surname: "Иванов",
+    },
+    isAuth: true,
     isLoading: false,
 };
 

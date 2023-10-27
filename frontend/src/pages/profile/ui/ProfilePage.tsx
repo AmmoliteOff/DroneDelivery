@@ -1,15 +1,19 @@
-import { useAppSelector } from "shared/model";
+import css from "./ProfilePage.module.css";
 
-import { userSelector } from "entities/user";
-import { ProfileCard } from "entities/user/ui/ProfileCard/ProfileCard";
+import { useAppSelector } from "shared/model";
+import { userSelector, ProfileCard } from "entities/user";
+import { LogoutButton } from "features/logout";
 
 export const ProfilePage = () => {
     const user = useAppSelector(userSelector);
 
     if (!user) return null;
     return (
-        <div>
-            <ProfileCard user={user} />
+        <div className={css.block}>
+            <ProfileCard
+                user={user}
+                logout={<LogoutButton variant="blackWhite" />}
+            />
         </div>
     );
 };

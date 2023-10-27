@@ -21,8 +21,8 @@ const ORDERS: Order[] = [
         drone: {
             id: "12",
             img: "drone.png",
-            maxWeight: 4,
-            charging: 70,
+            maxWeight: 10,
+            charging: 90,
         },
     },
     {

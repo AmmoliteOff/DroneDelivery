@@ -2,9 +2,15 @@ import css from "./LogoutButton.module.css";
 
 import { Button } from "shared/ui";
 
-export const LogoutButton = () => {
+interface LogoutButtonProps {
+    variant?: "text" | "blackWhite";
+}
+
+export const LogoutButton: React.FC<LogoutButtonProps> = ({
+    variant = "text",
+}) => {
     return (
-        <Button className={css.logoutButton} variant="text">
+        <Button variant={variant} className={css.logoutButton}>
             выйти с аккаунта
         </Button>
     );

@@ -17,5 +17,7 @@ export const Image: React.FC<ImageProps> = ({
 }) => {
     const clazz = cn(css.image, css[`image_${variant}`], className);
 
+    if (!src) return <div className={css.dummy}></div>;
+
     return <img onClick={onClick} className={clazz} src={src} alt="image" />;
 };

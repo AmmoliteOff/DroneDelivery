@@ -91,11 +91,10 @@
     border-radius: 10px;
     padding-top: 20px;
     padding-bottom: 20px;
-    min-width: 300px;
     display: flex;
+    gap: 30px;
     align-items: center;
     justify-content: space-around;
-    gap: 20px;
     min-height: 75px;
 }
 
@@ -122,6 +121,10 @@
 
 .button {
     min-width: 300px;
+}
+
+.productName {
+    font-size: 24px;
 }
 
 

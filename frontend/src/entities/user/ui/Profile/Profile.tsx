@@ -1,5 +1,7 @@
 import css from "./Profile.module.css";
 
+import { useNavigate } from "react-router-dom";
+
 import { Image } from "shared/ui";
 
 interface ProfileProps {
@@ -16,6 +18,12 @@ export const Profile: React.FC<ProfileProps> = ({
     img,
     logout,
 }) => {
+    const navigate = useNavigate();
+
+    const onClickAvatar = () => {
+        navigate("/profile");
+    };
+
     return (
         <div className={css.profile}>
             <div className={css.infoBlock}>
@@ -24,7 +32,12 @@ export const Profile: React.FC<ProfileProps> = ({
                 </h2>
                 {logout && logout}
             </div>
-            <Image src={img} variant="medium" className={css.avatar} />
+            <Image
+                onClick={onClickAvatar}
+                src={img}
+                variant="medium"
+                className={css.avatar}
+            />
         </div>
     );
 };

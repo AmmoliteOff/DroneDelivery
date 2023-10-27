@@ -40,7 +40,9 @@ export const OrderMax: React.FC<OrderMaxProps> = ({ order, renderDrone }) => {
                             <div className={css.product}>
                                 <Image src={product.img} variant="medium" />
                                 <div className={css.productDescr}>
-                                    <p>{product.name}</p>
+                                    <p className={css.productName}>
+                                        {product.name}
+                                    </p>
                                     <div className={css.weight}>
                                         <Image
                                             variant="small"
