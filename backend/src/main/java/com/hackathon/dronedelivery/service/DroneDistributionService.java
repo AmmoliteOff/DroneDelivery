@@ -43,7 +43,7 @@ public class DroneDistributionService {
 
     private void match(Drone drone, List<Order> orders){
         drone.setOrders(orders);
-        droneRepository.save(drone);
+        //droneRepository.save(drone);
 
         var request = new DroneSendRequest();
         request.setDrone(drone);
@@ -73,7 +73,7 @@ public class DroneDistributionService {
             }
             else {
                 match(drone, ordersToDeliver);
-                 //MATH DONE
+                 //MATCH DONE
             }
             return true;
         }
@@ -146,8 +146,8 @@ public class DroneDistributionService {
             result.add(coordToAdd);
             prevPoint = coordToAdd;
         }
-
-        result.add(eList.get(0));
+        if(eList.size()==1)
+            result.add(eList.get(0));
         return result;
     }
 
@@ -176,11 +176,11 @@ public class DroneDistributionService {
         JSONObject jsonObject = new JSONObject(jsonStr);
         var coords = jsonObject.getJSONObject("response")
                 .getJSONObject("GeoObjectCollection")
-                .getJSONObject("featureMember")
-                .getJSONObject("0")
+                .getJSONArray("featureMember")
+                .getJSONObject(0)
                 .getJSONObject("GeoObject")
                 .getJSONObject("Point")
-                .get("pos").toString();
+                .getString("pos");
 
         return new GeoCoords(coords);
     }

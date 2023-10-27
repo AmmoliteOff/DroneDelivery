@@ -11,7 +11,7 @@ public class DroneSendRequest {
     @Id
     long droneSendRequest;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     Drone drone;
 
     @OneToMany

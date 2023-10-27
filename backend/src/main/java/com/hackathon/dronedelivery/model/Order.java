@@ -29,7 +29,7 @@ public class Order {
 
     private Double weight;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Product> products;
 
     public double getWeight(){
