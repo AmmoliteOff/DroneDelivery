@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.model;
 
+import com.hackathon.dronedelivery.enums.DroneStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +33,8 @@ public class Drone {
     private double currentLongitude;
     private double currentLatitude;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private DroneStatus status;
     public boolean isChargeEnoughToDeliver(double distance){
         return fullChargeDistance*(charge/100) > distance && (fullChargeDistance-distance/fullChargeDistance)*100>=25;
     }

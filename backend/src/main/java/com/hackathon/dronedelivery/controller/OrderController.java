@@ -1,11 +1,9 @@
 package com.hackathon.dronedelivery.controller;
 
-import com.hackathon.dronedelivery.model.Notification;
 import com.hackathon.dronedelivery.model.Order;
 import com.hackathon.dronedelivery.service.DroneDistributionService;
 import com.hackathon.dronedelivery.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
