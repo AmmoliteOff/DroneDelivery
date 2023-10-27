@@ -1,12 +1,8 @@
 package com.hackathon.dronedelivery.service;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.hackathon.dronedelivery.model.DronePool;
-import com.hackathon.dronedelivery.model.GeoCoords;
-import com.hackathon.dronedelivery.model.Order;
-import com.hackathon.dronedelivery.model.OrderPool;
+import com.hackathon.dronedelivery.model.*;
 import com.hackathon.dronedelivery.util.WeightTree;
-import org.apache.coyote.Request;
+import org.aspectj.weaver.ast.Or;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,11 +11,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DroneDistributionService {
@@ -46,9 +39,11 @@ public class DroneDistributionService {
             }
 
             var ordersToDeliver = tree.getLeft();
-            ordersToDeliver = removeOrdersBasedOnDistance(ordersToDeliver);
+            ordersToDeliver = removeOrdersBasedOnDistance(drone,
+                    ordersToDeliver, new GeoCoords(drone.getCurrentLongitude(),
+                            drone.getCurrentLatitude()));
 
-            if(ordersToDeliver.size() == 0){
+            if(ordersToDeliver.isEmpty()){
                 //droneService.setBadDrone(drone);
                 produceMatch();
             }
@@ -61,17 +56,78 @@ public class DroneDistributionService {
             return false;
     }
 
-    private List<Order> removeOrdersBasedOnDistance(List<Order> orders) throws IOException {
+    private List<Order> removeOrdersBasedOnDistance(Drone drone, List<Order> orders, GeoCoords startPoint) throws IOException {
         List<GeoCoords> coords = new ArrayList<>();
-
+        List<Order> result = new ArrayList<>(orders);
+        Map<GeoCoords, Order> ordersMap = new HashMap<>();
         for (Order order:
              orders) {
-            coords.add(getCoords(order.getCustomerAddress()));
+            var c = getCoords(order.getCustomerAddress());
+            coords.add(c);
+            ordersMap.put(c, order);
         }
 
-        var a = 0;
+        coords = getShortestWay(startPoint, coords);
 
-        return orders;//
+        while(!(drone.isChargeEnoughToDeliver(getCoordsSum(coords))) || !coords.isEmpty()){
+            coords.remove(coords.size()-1);
+            result.remove(ordersMap.get(coords));
+        }
+
+        return result;
+    }
+
+    private double getCoordsSum(List<GeoCoords> coords){
+        double result = 0;
+        for(int i = 1; i<coords.size(); i++){
+            result+=getDistance(coords.get(i-1), coords.get(i));
+        }
+        return result;
+    }
+    private List<GeoCoords> getShortestWay(GeoCoords startPoint, List<GeoCoords> coords){
+        List<GeoCoords> eList = new ArrayList<>(coords);
+        List<GeoCoords> result = new LinkedList<>();
+        result.add(startPoint);
+
+        var coordToAdd = eList.get(0);
+        double min = getDistance(startPoint, coordToAdd);
+        for (GeoCoords coord :
+                eList) {
+            var dist = getDistance(startPoint, coord);
+
+            if(min>dist) {
+                min = dist;
+                coordToAdd = coord;
+            }
+        }
+
+        eList.remove(coordToAdd);
+        result.add(coordToAdd);
+        var prevPoint = coordToAdd;
+
+        for(int i = 0; i < coords.size()-1; i++) {
+            coordToAdd = eList.get(0);
+            min = getDistance(prevPoint, coordToAdd);
+            for (GeoCoords coord :
+                    eList) {
+                var dist = getDistance(prevPoint, coord);
+
+                if(min>dist){
+                    min = dist;
+                    coordToAdd = coord;
+                }
+            }
+            eList.remove(coordToAdd);
+            result.add(coordToAdd);
+            prevPoint = coordToAdd;
+        }
+
+        result.add(eList.get(0));
+        return result;
+    }
+
+    private double getDistance(GeoCoords first, GeoCoords second){
+        return Math.sqrt(Math.pow(second.getLatitude() - first.getLatitude(),2) + Math.pow(second.getLongitude() - first.getLongitude(),2));
     }
 
     private GeoCoords getCoords(String adress) throws IOException{
