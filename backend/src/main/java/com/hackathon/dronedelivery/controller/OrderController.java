@@ -6,6 +6,7 @@ import com.hackathon.dronedelivery.service.DroneDistributionService;
 import com.hackathon.dronedelivery.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +24,9 @@ public class OrderController {
     private final DroneDistributionService droneDistributionService;
 
     @PostMapping("/acceptOrder")
-    public Notification acceptOrder(@RequestBody Order order) throws IOException {
+    public ResponseEntity acceptOrder(@RequestBody Order order) throws IOException {
         droneDistributionService.AddOrder(order);
-        return new Notification();
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/orders")

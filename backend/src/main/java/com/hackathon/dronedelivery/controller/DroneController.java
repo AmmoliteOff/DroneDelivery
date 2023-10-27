@@ -6,6 +6,7 @@ import com.hackathon.dronedelivery.service.DroneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,12 @@ public class DroneController {
 
     @PostMapping("/drones")
     public ResponseEntity<List<Drone>> getDrones() {
+
         return ResponseEntity.ok(droneService.findAll());
+    }
+
+    @PostMapping("/addDrone")
+    public ResponseEntity<List<Drone>> addDrone(@RequestBody Drone drone) {
+        return ResponseEntity.ok(droneService.add(drone));
     }
 }

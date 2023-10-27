@@ -15,4 +15,7 @@ public class DroneService {
     public List<Drone> findAll() {
         return droneRepository.findAll();
     }
+    public void add(Drone drone){
+        droneRepository.save(drone);
+    }
 }
