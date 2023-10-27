@@ -23,10 +23,10 @@ public class OrderController {
     private final DroneDistributionService droneDistributionService;
 
     @PostMapping("/acceptOrder")
-    public ResponseEntity acceptOrder(@RequestBody Order order) throws IOException, URISyntaxException {
-        orderService.add(order);
+    public ResponseEntity<?> acceptOrder(@RequestBody Order order) throws IOException, URISyntaxException {
+        orderService.save(order);
         droneDistributionService.AddOrder(order);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/orders")

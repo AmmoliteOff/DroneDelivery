@@ -31,7 +31,7 @@ public class DroneController {
 
     @PostMapping("/addDrone")
     public ResponseEntity<?> addDrone(@RequestBody Drone drone) throws IOException, URISyntaxException {
-        droneService.add(drone);
+        droneService.save(drone);
         droneDistributionService.addDrone(drone);
         return new ResponseEntity<>(HttpStatus.OK);
     }

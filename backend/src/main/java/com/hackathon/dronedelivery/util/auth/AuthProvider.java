@@ -2,28 +2,21 @@ package com.hackathon.dronedelivery.util.auth;
 
 
 import com.hackathon.dronedelivery.model.User;
-import com.hackathon.dronedelivery.service.AuthService;
-import com.hackathon.dronedelivery.service.UsersService;
+import com.hackathon.dronedelivery.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-
 @Component
+@RequiredArgsConstructor
 public class AuthProvider implements AuthenticationProvider {
-    AuthService authService;
-    UsersService usersService;
 
-    public AuthProvider(@Autowired AuthService authService, @Autowired UsersService usersService) {
-        this.authService = authService;
-        this.usersService = usersService;
-    }
+    private final UserService userService;
+
 
     @Override
     public Authentication authenticate(Authentication authentication)
@@ -31,7 +24,7 @@ public class AuthProvider implements AuthenticationProvider {
         try{
             String name = authentication.getName();
             String password = authentication.getCredentials().toString();
-            User user = usersService.getUser(name);
+            User user = userService.getUser(name);
             var grantedAuthority = user.getAuthorities();
             if(grantedAuthority!=null) {
                 return new UsernamePasswordAuthenticationToken(

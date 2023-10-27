@@ -24,9 +24,6 @@ public class Drone {
     @OneToMany(mappedBy = "drone", cascade = CascadeType.ALL)
     private List<Order> orders;
 
-    @OneToOne
-    private DroneSendRequest droneSendRequest;
-
     private double charge;
 
     private double fullChargeDistance;

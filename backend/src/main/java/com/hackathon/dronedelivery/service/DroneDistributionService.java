@@ -1,8 +1,6 @@
 package com.hackathon.dronedelivery.service;
 
 import com.hackathon.dronedelivery.model.*;
-import com.hackathon.dronedelivery.repository.DroneRepository;
-import com.hackathon.dronedelivery.repository.RequestRepository;
 import com.hackathon.dronedelivery.util.WeightTree;
 import lombok.AllArgsConstructor;
 import org.json.JSONObject;
@@ -19,9 +17,10 @@ import java.util.*;
 public class DroneDistributionService {
     private final DronePool dronePool;
     private final OrderPool orderPool;
-    private final RequestRepository requestRepository;
+    private final RequestService requestService;
+    private final OrderService orderService;
 
-    private final DroneRepository droneRepository;
+    private final DroneService droneService;
 //    public DroneDistributionService(@Autowired DronePool dronePool,
 //                                    @Autowired OrderPool orderPool){
 //        this.dronePool = dronePool;
@@ -38,16 +37,20 @@ public class DroneDistributionService {
         produceMatch();
     }
 
-    private void match(Drone drone, List<Order> orders){
-        Optional<Drone> fixDrone = droneRepository.findById(drone.getId());
-        drone.setOrders(orders);
-        //droneRepository.save(drone);
+    private void match(Drone drone, List<Order> orders) {
+        Drone persistDrone = droneService.findById(drone.getId()).get();
+        List<Order> persistOrders = new ArrayList<>();
+        for (Order value : orders) {
+            Order order = orderService.findById(value.getId()).get();
+            order.setDrone(persistDrone);
+            persistOrders.add(order);
+        }
+        persistDrone.setOrders(persistOrders);
         var request = new DroneSendRequest();
-        request.setDrone(fixDrone.get());
+        request.setDrone(persistDrone);
         request.setStatus("Создана");
-        request.setOrderList(orders);
-
-        requestRepository.save(request);
+        request.setOrderList(persistOrders);
+        requestService.save(request);
     }
 
     private boolean produceMatch() throws IOException, URISyntaxException {

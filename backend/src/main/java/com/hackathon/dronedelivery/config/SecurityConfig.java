@@ -1,7 +1,8 @@
 package com.hackathon.dronedelivery.config;
 
 import com.hackathon.dronedelivery.enums.Role;
-import com.hackathon.dronedelivery.util.auth.DroneDeliveryUserDetailsService;
+import com.hackathon.dronedelivery.service.UserService;
+import com.hackathon.dronedelivery.util.auth.UserDetailsService;
 import com.hackathon.dronedelivery.util.auth.AuthProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
@@ -33,21 +33,23 @@ import java.util.Arrays;
 @EnableWebMvc
 public class SecurityConfig implements WebMvcConfigurer{
 
-    private AuthProvider authProvider;
-    private String frontendUrl;
-    private String rememberMeKey;
-    DataSource dataSource;
+    private final AuthProvider authProvider;
+    private final String frontendUrl;
+    private final String rememberMeKey;
+    private final DataSource dataSource;
+    private final UserService userService;
 
-    public SecurityConfig(@Value("${backend.rememberMeKey}") String rememberMeKey, @Value("${frontend.url}") String frontendUrl, @Autowired DataSource dataSource, @Autowired AuthProvider authProvider){
+    public SecurityConfig(@Value("${backend.rememberMeKey}") String rememberMeKey, @Value("${frontend.url}") String frontendUrl, @Autowired DataSource dataSource, @Autowired AuthProvider authProvider, UserService userService){
         this.dataSource = dataSource;
         this.authProvider = authProvider;
         this.frontendUrl =frontendUrl;
         this.rememberMeKey = rememberMeKey;
+        this.userService = userService;
     }
 
     @Bean
-    UserDetailsService userDetailsService(){
-        return new DroneDeliveryUserDetailsService();
+    org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){
+        return new UserDetailsService(userService);
     }
 
     @Bean
