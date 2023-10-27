@@ -1,6 +1,7 @@
 package com.hackathon.dronedelivery.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hackathon.dronedelivery.enums.RequestStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,6 @@ public class DroneSendRequest {
     @JsonIgnore
     private List<Order> orderList;
 
-    @Column
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private RequestStatus status;
 }

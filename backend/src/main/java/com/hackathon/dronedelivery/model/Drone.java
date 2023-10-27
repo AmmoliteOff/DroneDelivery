@@ -31,8 +31,9 @@ public class Drone {
     private double currentLongitude;
     private double currentLatitude;
 
+    private String imageLink;
     @Enumerated(EnumType.STRING)
-    private DroneStatus status;
+    private DroneStatus status = DroneStatus.READY_FOR_DELIVERY;
     public boolean isChargeEnoughToDeliver(double distance){
         return fullChargeDistance*(charge/100) > distance && (fullChargeDistance-distance/fullChargeDistance)*100>=25;
     }
