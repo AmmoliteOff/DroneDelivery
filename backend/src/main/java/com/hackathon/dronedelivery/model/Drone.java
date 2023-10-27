@@ -28,6 +28,9 @@ public class Drone {
     private double fullChargeDistance;
 
     private double maxWeight;
+
+    private double currentLongitude;
+    private double currentLatitude;
     public boolean isChargeEnoughToDeliver(double distance){
         return fullChargeDistance*(charge/100) > distance && (fullChargeDistance-distance/fullChargeDistance)*100>=25;
     }
