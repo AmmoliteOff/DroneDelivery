@@ -174,7 +174,14 @@ public class DroneDistributionService {
 
         String jsonStr = response.toString();
         JSONObject jsonObject = new JSONObject(jsonStr);
+        var coords = jsonObject.getJSONObject("response")
+                .getJSONObject("GeoObjectCollection")
+                .getJSONObject("featureMember")
+                .getJSONObject("0")
+                .getJSONObject("GeoObject")
+                .getJSONObject("Point")
+                .get("pos").toString();
 
-        return new GeoCoords(jsonObject.getJSONObject("Point").get("pos").toString());
+        return new GeoCoords(coords);
     }
 }
