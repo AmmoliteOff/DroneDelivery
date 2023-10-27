@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Entity
 @Builder
@@ -16,4 +18,15 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String customerAddress;
+    private String customerName;
+    private String customerNumber;
+
+    private Double weight;
+
+    @OneToMany
+    private List<Product> products;
+
+
 }

@@ -5,11 +5,9 @@ import com.hackathon.dronedelivery.model.Order;
 import com.hackathon.dronedelivery.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,7 +23,19 @@ public class OrderController {
         return new Notification();
     }
 
+    @GetMapping("/orders")
     public ResponseEntity<List<Order>> getOrders() {
-        return ResponseEntity.ok(orderService.findAll());
+        List<Order> orders = new ArrayList<>();
+        for (long i = 0; i < 10; i++) {
+            orders.add(Order.builder()
+                            .id(i)
+                            .customerName("Вася")
+                            .customerNumber("234-234")
+                            .products(new ArrayList<>())
+                            .weight(0.0)
+                            .customerAddress("Воронеж")
+                            .build());
+        }
+        return ResponseEntity.ok(orders);
     }
 }
