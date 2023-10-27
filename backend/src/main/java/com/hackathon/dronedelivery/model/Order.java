@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.model;
 
+import com.hackathon.dronedelivery.enums.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,8 @@ public class Order {
     private String customerName;
     private String customerNumber;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
     private Double weight;
 
     @OneToMany
