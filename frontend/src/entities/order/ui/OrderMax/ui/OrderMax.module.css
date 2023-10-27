@@ -1,18 +1,21 @@
 .orderMax { 
-    background-color: var(--second-background-color);
-
+    margin-top: 30px;
+    margin-left: 40px;
     padding: 20px;
-
     display: flex;
     flex-direction: column;
     gap: 30px;
 
     border-radius: 10px;
     max-width: 1200px;
+
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
 }
 
 .drone {
-    background-color: var(--fourth-background-color);
     min-height: 75px;
 
     display: flex;
@@ -21,18 +24,32 @@
     font-size: 24px;
 }
 
+.droneButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
 .orderInfo {
+    background-color: var(--second-background-color);
     padding-right: 50px;
     display: flex;
     border-radius: 10px;
     gap: 20px;
+    padding: 40px;
 }
 
 .name {
-    font-size: 24px;
+    font-size: 32px;
 }
 
+
 .customer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.customerInfo {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -45,18 +62,25 @@
 }
 
 .productInfo {
+    padding: 40px;
+    background-color: var(--second-background-color);
     display: flex;
     flex-direction: column;
     width: 100%;
     gap: 20px;
+    border-radius: 10px;
 }
 
-.droneImg {
-    width: 330px;
-    height: 200px;
+.removeButton {
+    background-color: var(--red);
+    max-width: 522px;
+    max-height: 90px;
 }
 
 .productBlock {
+    border-radius: 10px;
+    padding: 15px;
+    background-color: var(--fourth-background-color);
     width: 100%;
     display: flex;
     align-items: center;
@@ -64,7 +88,6 @@
 }
 
 .product {
-    background-color: var(--fourth-background-color);
     border-radius: 10px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -102,15 +125,3 @@
 }
 
 
-.drone {
-    display: flex;
-}
-
-.droneInfo {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-}
-
-.droneInfoBlock {
-}

@@ -2,16 +2,16 @@
 	--text-color: white;
 	--second-text-color: #42AAFF;
 	--third-text-color: #ffff;
-	--fourth-text-color: #888;
+	--fourth-text-color: #d5cccc;
 
 	--background-color: #454255;
 	--second-background-color: #67597F;
 	--fourth-background-color: #393944;
 	
 	--button-text-color: white;
-	--button-background-color: rgb(61, 232, 61);;
+	--button-background-color: #74F95E;;
 
-	--red: red;
+	--red: #F84F4F;
 	--green: rgb(61, 232, 61);
 }
 

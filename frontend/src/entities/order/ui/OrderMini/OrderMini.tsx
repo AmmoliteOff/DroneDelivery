@@ -22,9 +22,7 @@ export const OrderMini: React.FC<OrderMiniProps> = ({
 
     return (
         <div onClick={onClick} className={clazz}>
-            <div className={css.id}>
-                Заказ <span>#{order.id}</span>
-            </div>
+            Заказ <span>#{order.id}</span>
         </div>
     );
 };

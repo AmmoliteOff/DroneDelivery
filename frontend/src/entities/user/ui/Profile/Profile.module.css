@@ -6,7 +6,16 @@
 }
 
 .avatar {
-    width: 60px;
-    height: 60px;
     border-radius: 100%;
+    cursor: pointer;
+}
+
+.info {
+    font-size: 40px;
+}
+
+.infoBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
 }

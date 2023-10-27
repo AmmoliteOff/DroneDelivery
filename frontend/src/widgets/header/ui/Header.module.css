@@ -8,9 +8,9 @@
     background-color: var(--second-background-color);
 
     padding: 20px;
-    border-radius: 10px;
 }
 
 .logo {
-    font-size: 30px;
+    font-size: 51px;
+    cursor: pointer;
 }

@@ -1,35 +1,33 @@
 .content {
-    margin-top: 20px;
-    padding-top: 60px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-top: 20px;
     background-color: var(--second-background-color);
-    border-radius: 10px;
     display: flex;
-
-    gap: 20px;
-
-    padding-bottom: 60px;
 }
 
 .ordersMini {
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    max-width: 200px;
+    max-width: 400px;
     width: 100%;
     gap: 20px;
+
+    background-color: var(--background-color);
 }
 
 .ordersMax {
-    width: 100%;
-    /* background-color: var(--fourth-background-color); */
-
-    padding-left: 20px;
     padding-top: 20px;
-    
-    border-radius: 10px;
+    width: 100%;
+    background-color: var(--fourth-background-color);
+
+    display: flex;
+    justify-content: center;
 }
 
 .ordersTitle {
-    font-size: 24px;
+    font-size: 32px;
+}
+
+.selectOrderTitlte {
+    font-size: 40px;
 }

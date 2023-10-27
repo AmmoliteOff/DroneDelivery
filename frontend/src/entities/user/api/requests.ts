@@ -8,6 +8,8 @@ export const login = async (props: LoginProps) => {
     );
 
     const accessToken: string = response.headers["Authorization"];
+
+    console.log({ ...response.data, accessToken });
     return { ...response.data, accessToken };
 };
 

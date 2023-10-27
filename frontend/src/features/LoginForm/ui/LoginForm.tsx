@@ -42,14 +42,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
             <div className={css.formblock}>
-                <label htmlFor="login">Используйте свои данные для входа</label>
+                <label htmlFor="username">Username</label>
                 <input
-                    {...register("email")}
+                    {...register("username")}
                     id="email"
                     type="text"
                     className={css.input}
                 />
-                <p className={css.error}>{errors.email?.message}</p>
+                <p className={css.error}>{errors.username?.message}</p>
             </div>
             <div className={css.formblock}>
                 <label htmlFor="password">Password</label>

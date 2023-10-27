@@ -3,6 +3,7 @@ import css from "./Content.module.css";
 import { useState } from "react";
 
 import { type Order, OrderMini, OrderMax } from "entities/order";
+import { Drone } from "entities/drone";
 
 const ORDERS: Order[] = [
     {
@@ -20,6 +21,8 @@ const ORDERS: Order[] = [
         drone: {
             id: "12",
             img: "drone.png",
+            maxWeight: 4,
+            charging: 70,
         },
     },
     {
@@ -34,11 +37,14 @@ const ORDERS: Order[] = [
         drone: {
             id: "321",
             img: "drone.png",
+            maxWeight: 4,
+            charging: 70,
         },
     },
 ];
 
 export const Content = () => {
+    const [orders, setOrders] = useState<Order[]>(ORDERS);
     const [selectedOrder, setSelectedOrder] = useState<Order | undefined>();
 
     const onClickOrder = (order: Order) => {
@@ -49,7 +55,7 @@ export const Content = () => {
         <div className={css.content}>
             <div className={css.ordersMini}>
                 <h2 className={css.ordersTitle}>Заказы:</h2>
-                {ORDERS.map((order) => {
+                {orders.map((order) => {
                     return (
                         <OrderMini
                             active={order.id === selectedOrder?.id}
@@ -62,9 +68,14 @@ export const Content = () => {
             </div>
             <div className={css.ordersMax}>
                 {selectedOrder ? (
-                    <OrderMax order={selectedOrder} />
+                    <OrderMax
+                        order={selectedOrder}
+                        renderDrone={() => (
+                            <Drone drone={selectedOrder.drone} />
+                        )}
+                    />
                 ) : (
-                    "Выберите заказ"
+                    <h1 className={css.selectOrderTitlte}>Выберите заказ</h1>
                 )}
             </div>
         </div>

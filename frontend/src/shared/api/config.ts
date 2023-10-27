@@ -8,18 +8,25 @@ interface ConfigAPI {
         order: {
             get: string;
         };
+
+        drones: {
+            get: string;
+        };
     };
 }
 
 export const config: ConfigAPI = {
-    baseUrl: "http://localhost:8080/",
+    baseUrl: "http://localhost:8765/",
     paths: {
         user: {
-            login: "/user/login",
-            logout: "/user/logout",
+            login: "/api/authenticate",
+            logout: "/api/logout",
         },
         order: {
-            get: "/orders",
+            get: "/api/orders",
+        },
+        drones: {
+            get: "/api/drones",
         },
     },
 };

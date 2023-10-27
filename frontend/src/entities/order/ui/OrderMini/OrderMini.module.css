@@ -1,12 +1,14 @@
 .order {
     display: flex;
-
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    width: fit-content;
+    width: 100%;
+    min-height: 62px;
+    font-size: 28px;
 }
 
 .order_active {
-    padding: 5px;
     border-radius: 10px;
-    border: 3px solid var(--green);
+    background-color: var(--second-background-color);
 }

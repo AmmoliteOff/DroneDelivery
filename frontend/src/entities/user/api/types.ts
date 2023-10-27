@@ -1,7 +1,7 @@
 import { User } from "../model/types";
 
 export interface LoginProps {
-    login: string;
+    username: string;
     password: string;
 }
 

@@ -5,28 +5,35 @@ import { type Order } from "entities/order";
 
 interface OrderMaxProps {
     order: Order;
+    renderDrone: () => React.ReactNode;
 }
 
-export const OrderMax: React.FC<OrderMaxProps> = ({ order }) => {
+export const OrderMax: React.FC<OrderMaxProps> = ({ order, renderDrone }) => {
     return (
         <div className={css.orderMax}>
             <div className={css.orderInfo}>
-                <div className={css.drone}>
-                    <Image src={order.drone.img} variant="big" />
-                    <div className={css.droneInfo}>
-                        <p>Дрон #{order.drone.id}</p>
-                        <div className={css.droneInfoBlock}>
-                            <Image variant="small" src="weight.png" />
-                        </div>
-                    </div>
-                </div>
-                <div className={css.customer}>
-                    <h3 className={css.name}>{order.customer.name}</h3>
-                    <p>Адрес доставки: {order.deliveryAdress}</p>
-                    <p>Номер телефона: {order.customer.telephoneNumber}</p>
+                {renderDrone()}
+
+                <div className={css.droneButtons}>
+                    <Button>Отправить дрона</Button>
+                    <Button className={css.removeButton}>
+                        Отменить заказ целиком
+                    </Button>
                 </div>
             </div>
+
             <div className={css.productInfo}>
+                <div className={css.customer}>
+                    <div className={css.customerInfo}>
+                        <h3 className={css.name}>{order.customer.name}</h3>
+                        <p>Адрес доставки: {order.deliveryAdress}</p>
+                        <p>Номер телефона: {order.customer.telephoneNumber}</p>
+                    </div>
+                    <Button className={css.removeButton}>
+                        Отменить эту часть заказа
+                    </Button>
+                </div>
+
                 {order.products.map((product) => {
                     return (
                         <div key={product.id} className={css.productBlock}>
