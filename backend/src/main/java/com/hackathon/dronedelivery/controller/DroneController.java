@@ -2,6 +2,7 @@ package com.hackathon.dronedelivery.controller;
 
 import com.hackathon.dronedelivery.model.Drone;
 
+import com.hackathon.dronedelivery.service.DroneDistributionService;
 import com.hackathon.dronedelivery.service.DroneService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -19,6 +22,7 @@ import java.util.List;
 public class DroneController {
 
     private final DroneService droneService;
+    private final DroneDistributionService droneDistributionService;
 
     @PostMapping("/drones")
     public ResponseEntity<List<Drone>> getDrones() {
@@ -27,8 +31,9 @@ public class DroneController {
     }
 
     @PostMapping("/addDrone")
-    public ResponseEntity<?> addDrone(@RequestBody Drone drone) {
+    public ResponseEntity addDrone(@RequestBody Drone drone) throws IOException, URISyntaxException {
         droneService.add(drone);
-        return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.OK);
+        droneDistributionService.addDrone(drone);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

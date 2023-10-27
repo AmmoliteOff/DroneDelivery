@@ -5,5 +5,6 @@ public enum Status {
     ASSEMBLES,
     SHIPPED,
     DELIVERED,
-    RECEIVED
+    RECEIVED,
+    READY
 }

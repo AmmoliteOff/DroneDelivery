@@ -17,6 +17,8 @@ public class WeightTree {
 
     public List<Order> getLeft(){
         List<Order> result = new ArrayList<>();
+        if(order!=null)
+            result.add(order);
         if(this.left!=null)
             result.addAll(this.left.getLeft());
         return result;

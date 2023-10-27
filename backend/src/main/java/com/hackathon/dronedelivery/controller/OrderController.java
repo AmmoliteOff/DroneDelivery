@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class OrderController {
     private final DroneDistributionService droneDistributionService;
 
     @PostMapping("/acceptOrder")
-    public ResponseEntity acceptOrder(@RequestBody Order order) throws IOException {
+    public ResponseEntity acceptOrder(@RequestBody Order order) throws IOException, URISyntaxException {
         droneDistributionService.AddOrder(order);
         return new ResponseEntity(HttpStatus.OK);
     }

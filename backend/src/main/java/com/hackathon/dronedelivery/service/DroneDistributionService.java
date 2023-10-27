@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
@@ -31,8 +31,13 @@ public class DroneDistributionService {
 //        this.orderPool = orderPool;
 //    }
 
-    public void AddOrder(Order order) throws IOException {
+    public void AddOrder(Order order) throws IOException, URISyntaxException {
         orderPool.add(order);
+        produceMatch();
+    }
+
+    public void addDrone(Drone drone) throws IOException, URISyntaxException {
+        dronePool.add(drone);
         produceMatch();
     }
 
@@ -48,7 +53,7 @@ public class DroneDistributionService {
         requestRepository.save(request);
     }
 
-    private boolean produceMatch() throws IOException {
+    private boolean produceMatch() throws IOException, URISyntaxException {
         if(!dronePool.isEmpty() && !orderPool.isEmpty()){
             var drone = dronePool.poll();
             var tree = new WeightTree(drone.getMaxWeight());
@@ -76,7 +81,7 @@ public class DroneDistributionService {
             return false;
     }
 
-    private List<Order> removeOrdersBasedOnDistance(Drone drone, List<Order> orders, GeoCoords startPoint) throws IOException {
+    private List<Order> removeOrdersBasedOnDistance(Drone drone, List<Order> orders, GeoCoords startPoint) throws IOException, URISyntaxException {
         List<GeoCoords> coords = new ArrayList<>();
         List<Order> result = new ArrayList<>(orders);
         Map<GeoCoords, Order> ordersMap = new HashMap<>();
@@ -150,12 +155,13 @@ public class DroneDistributionService {
         return Math.sqrt(Math.pow(second.getLatitude() - first.getLatitude(),2) + Math.pow(second.getLongitude() - first.getLongitude(),2));
     }
 
-    private GeoCoords getCoords(String adress) throws IOException{
-        URL url = new URL("https://geocode-maps.yandex.ru/1.x?apikey=96839f5b-3a26-4ecc-9f2d-feb2ba6ab2d3&geocode=\""+adress+"\"&format=json");
+    private GeoCoords getCoords(String adress) throws IOException, URISyntaxException {
+        //URL url = new URL("https://geocode-maps.yandex.ru/1.x?apikey=96839f5b-3a26-4ecc-9f2d-feb2ba6ab2d3&geocode=\""+adress+"\"&format=json");
+        String encodedAddress = URLEncoder.encode(adress, "UTF-8");
 
+        URL url = new URL("https://geocode-maps.yandex.ru/1.x?apikey=96839f5b-3a26-4ecc-9f2d-feb2ba6ab2d3&geocode=" + encodedAddress + "&format=json");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
-
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String line;

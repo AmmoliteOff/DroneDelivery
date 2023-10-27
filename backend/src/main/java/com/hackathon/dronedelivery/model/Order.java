@@ -31,5 +31,13 @@ public class Order {
     @OneToMany
     private List<Product> products;
 
+    public double getWeight(){
+        double res = 0;
+        for (Product product:
+             products) {
+            res+=product.getWeight();
+        }
+        return res;
+    }
 
 }
