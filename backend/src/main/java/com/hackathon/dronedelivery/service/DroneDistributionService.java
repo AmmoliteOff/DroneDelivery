@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.service;
 
+import com.hackathon.dronedelivery.enums.DroneStatus;
 import com.hackathon.dronedelivery.model.*;
 import com.hackathon.dronedelivery.util.WeightTree;
 import com.hackathon.dronedelivery.util.geocoding.Geocoding;
@@ -43,6 +44,7 @@ public class DroneDistributionService {
         }
         persistDrone.setOrders(persistOrders);
         var request = new DroneSendRequest();
+        persistDrone.setStatus(DroneStatus.APPOINTED);
         request.setDrone(persistDrone);
         request.setStatus("Создана");
         requestService.save(request);

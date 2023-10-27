@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hackathon.dronedelivery.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,7 @@ public class Order {
     private List<Product> products;
 
     @ManyToOne
+    @JsonIgnore
     private Drone drone;
 
     public double getWeight(){

@@ -5,6 +5,8 @@ import com.hackathon.dronedelivery.repository.RequestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RequestService {
@@ -12,5 +14,9 @@ public class RequestService {
 
     public DroneSendRequest save(DroneSendRequest request) {
         return requestRepository.save(request);
+    }
+
+    public List<DroneSendRequest> findAll(){
+        return requestRepository.findAll();
     }
 }

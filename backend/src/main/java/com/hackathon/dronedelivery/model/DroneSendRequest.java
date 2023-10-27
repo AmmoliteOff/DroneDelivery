@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class DroneSendRequest {
 
     @Transient
     @OneToMany
+    @JsonIgnore
     private List<Order> orderList;
 
     @Column

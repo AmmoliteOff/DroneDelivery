@@ -81,7 +81,7 @@ public class SecurityConfig implements WebMvcConfigurer{
         http.cors().and()
                 .authenticationManager(authManager(http))
                 .authorizeHttpRequests()
-                .requestMatchers("/api/register", "/login").permitAll()
+                .requestMatchers("/api/register", "/login", "/api/acceptOrder").permitAll()
                 .requestMatchers("/api/*").hasAuthority(Role.DRONES_SENDER.name())
                 .anyRequest()
                 .authenticated()
