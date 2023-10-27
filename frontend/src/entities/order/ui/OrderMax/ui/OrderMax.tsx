@@ -1,4 +1,4 @@
-import { Button } from "shared/ui";
+import { Button, Image } from "shared/ui";
 import css from "./OrderMax.module.css";
 
 import { type Order } from "entities/order";
@@ -12,34 +12,41 @@ export const OrderMax: React.FC<OrderMaxProps> = ({ order }) => {
         <div className={css.orderMax}>
             <div className={css.orderInfo}>
                 <div className={css.drone}>
-                    <img className={css.droneImg} src="drone.png" alt="drone" />
+                    <Image src={order.drone.img} variant="big" />
                     <div className={css.droneInfo}>
-                        <p>Дрон #{order.droneId}</p>
-                    </div>
-                </div>
-                <div className={css.customer}>
-                    <h3 className={css.name}>Егор</h3>
-                    <p>Адрес доставки: Университетская площадь</p>
-                    <p>Номер телефона: 88005553535</p>
-                </div>
-            </div>
-            <div className={css.productInfo}>
-                <div className={css.product}>
-                    <img src="banana.png" className={css.banana} alt="banana" />
-                    <div className={css.productDescr}>
-                        <p>Бананы</p>
-                        <div className={css.weight}>
-                            <img
-                                className={css.weightIcon}
-                                src="weight.png"
-                                alt="weight"
-                            />
-                            <p>2 кг</p>
+                        <p>Дрон #{order.drone.id}</p>
+                        <div className={css.droneInfoBlock}>
+                            <Image variant="small" src="weight.png" />
                         </div>
                     </div>
                 </div>
-
-                <Button>Добавить</Button>
+                <div className={css.customer}>
+                    <h3 className={css.name}>{order.customer.name}</h3>
+                    <p>Адрес доставки: {order.deliveryAdress}</p>
+                    <p>Номер телефона: {order.customer.telephoneNumber}</p>
+                </div>
+            </div>
+            <div className={css.productInfo}>
+                {order.products.map((product) => {
+                    return (
+                        <div key={product.id} className={css.productBlock}>
+                            <div className={css.product}>
+                                <Image src={product.img} variant="medium" />
+                                <div className={css.productDescr}>
+                                    <p>{product.name}</p>
+                                    <div className={css.weight}>
+                                        <Image
+                                            variant="small"
+                                            src="weight.png"
+                                        />
+                                        <p>{product.weight} кг</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <Button className={css.button}>Добавить</Button>
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );

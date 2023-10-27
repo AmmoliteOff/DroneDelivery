@@ -1,0 +1,19 @@
+.image {
+    width: 100px;
+    height: 100px;
+}
+
+.image_medium {
+    width: 100px;
+    height: 100px;
+}
+
+.image_small {
+    width: 30px;
+    height: 30px;
+}
+
+.image_big {
+    width: 260px;
+    height: 200px;
+}

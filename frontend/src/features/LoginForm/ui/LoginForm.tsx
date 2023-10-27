@@ -44,12 +44,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
             <div className={css.formblock}>
                 <label htmlFor="login">Используйте свои данные для входа</label>
                 <input
-                    {...register("login")}
-                    id="login"
+                    {...register("email")}
+                    id="email"
                     type="text"
                     className={css.input}
                 />
-                <p className={css.error}>{errors.login?.message}</p>
+                <p className={css.error}>{errors.email?.message}</p>
             </div>
             <div className={css.formblock}>
                 <label htmlFor="password">Password</label>

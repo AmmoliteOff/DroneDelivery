@@ -7,17 +7,34 @@ import { type Order, OrderMini, OrderMax } from "entities/order";
 const ORDERS: Order[] = [
     {
         id: "864",
-        deliveryAdress: "Университетская д. 1",
-        customerNumber: "8594595943",
-        products: [],
-        droneId: "213",
+        deliveryAdress: "Кольцовская д. 1",
+        customer: {
+            name: "Ваня",
+            surname: "Иванов",
+            telephoneNumber: "8594595943",
+        },
+        products: [
+            { id: "1", img: "banana.png", name: "Бананы", weight: 2 },
+            { id: "2", img: "banana.png", name: "Бананы", weight: 2 },
+        ],
+        drone: {
+            id: "12",
+            img: "drone.png",
+        },
     },
     {
         id: "432",
-        products: [],
-        deliveryAdress: "Университетская д. 1",
-        customerNumber: "88005553535",
-        droneId: "321",
+        deliveryAdress: "Университетская д. 5",
+        customer: {
+            name: "Сергей",
+            surname: "Сергеев",
+            telephoneNumber: "88005553535",
+        },
+        products: [{ id: "4", img: "pear.png", name: "Груши ", weight: 1 }],
+        drone: {
+            id: "321",
+            img: "drone.png",
+        },
     },
 ];
 
@@ -27,8 +44,6 @@ export const Content = () => {
     const onClickOrder = (order: Order) => {
         setSelectedOrder(order);
     };
-
-    console.log(selectedOrder);
 
     return (
         <div className={css.content}>
@@ -46,7 +61,11 @@ export const Content = () => {
                 })}
             </div>
             <div className={css.ordersMax}>
-                {selectedOrder && <OrderMax order={selectedOrder} />}
+                {selectedOrder ? (
+                    <OrderMax order={selectedOrder} />
+                ) : (
+                    "Выберите заказ"
+                )}
             </div>
         </div>
     );
