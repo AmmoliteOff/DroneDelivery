@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "drone")
-public abstract class Drone {
+public class Drone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
