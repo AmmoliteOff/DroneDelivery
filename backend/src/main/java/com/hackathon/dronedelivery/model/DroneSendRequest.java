@@ -12,7 +12,7 @@ public class DroneSendRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long droneSendRequest;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private Drone drone;
 
     @Transient

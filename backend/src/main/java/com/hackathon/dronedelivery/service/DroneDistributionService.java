@@ -39,11 +39,11 @@ public class DroneDistributionService {
     }
 
     private void match(Drone drone, List<Order> orders){
+        Optional<Drone> fixDrone = droneRepository.findById(drone.getId());
         drone.setOrders(orders);
         //droneRepository.save(drone);
-
         var request = new DroneSendRequest();
-        request.setDrone(drone);
+        request.setDrone(fixDrone.get());
         request.setStatus("Создана");
         request.setOrderList(orders);
 
