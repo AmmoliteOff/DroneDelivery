@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UsersService {
+public class UserService {
     private final UserRepository userRepository;
 
     public User getUser(Long id){
