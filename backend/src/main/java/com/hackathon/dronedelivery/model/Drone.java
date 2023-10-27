@@ -21,8 +21,11 @@ public class Drone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "drone", cascade = CascadeType.ALL)
     private List<Order> orders;
+
+    @ManyToOne
+    private DroneSendRequest droneSendRequest;
 
     private double charge;
 

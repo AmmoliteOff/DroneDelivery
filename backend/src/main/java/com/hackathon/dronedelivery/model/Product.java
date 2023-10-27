@@ -17,6 +17,11 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
     private double weight;
+
+    private String name;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 }

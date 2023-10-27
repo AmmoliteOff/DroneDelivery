@@ -26,14 +26,13 @@ public class DroneController {
 
     @PostMapping("/drones")
     public ResponseEntity<List<Drone>> getDrones() {
-
         return ResponseEntity.ok(droneService.findAll());
     }
 
     @PostMapping("/addDrone")
-    public ResponseEntity addDrone(@RequestBody Drone drone) throws IOException, URISyntaxException {
+    public ResponseEntity<?> addDrone(@RequestBody Drone drone) throws IOException, URISyntaxException {
         droneService.add(drone);
         droneDistributionService.addDrone(drone);
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

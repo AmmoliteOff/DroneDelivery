@@ -2,17 +2,15 @@ package com.hackathon.dronedelivery.service;
 
 import com.hackathon.dronedelivery.model.User;
 import com.hackathon.dronedelivery.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UsersService {
-    private UserRepository userRepository;
-    public UsersService(@Autowired UserRepository userRepository){
-        this.userRepository = userRepository;
-    }
+    private final UserRepository userRepository;
 
     public User getUser(Long id){
         return userRepository.findById(id).get();

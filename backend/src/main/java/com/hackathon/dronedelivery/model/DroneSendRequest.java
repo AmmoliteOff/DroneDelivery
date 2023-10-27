@@ -9,14 +9,16 @@ import java.util.List;
 @Data
 public class DroneSendRequest {
     @Id
-    long droneSendRequest;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long droneSendRequest;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    Drone drone;
+    private Drone drone;
 
+    @Transient
     @OneToMany
-    List<Order> orderList;
+    private List<Order> orderList;
 
     @Column
-    String status;
+    private String status;
 }

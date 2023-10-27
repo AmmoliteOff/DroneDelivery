@@ -5,16 +5,13 @@ import com.hackathon.dronedelivery.repository.DroneRepository;
 import com.hackathon.dronedelivery.repository.RequestRepository;
 import com.hackathon.dronedelivery.util.WeightTree;
 import lombok.AllArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Service
@@ -85,8 +82,7 @@ public class DroneDistributionService {
         List<GeoCoords> coords = new ArrayList<>();
         List<Order> result = new ArrayList<>(orders);
         Map<GeoCoords, Order> ordersMap = new HashMap<>();
-        for (Order order:
-             orders) {
+        for (Order order: orders) {
             var c = getCoords(order.getCustomerAddress());
             coords.add(c);
             ordersMap.put(c, order);
@@ -94,7 +90,7 @@ public class DroneDistributionService {
 
         coords = getShortestWay(startPoint, coords);
 
-        while(!(drone.isChargeEnoughToDeliver(getCoordsSum(coords))) || !coords.isEmpty()){
+        while(coords.size()-1 >= 0 && !(drone.isChargeEnoughToDeliver(getCoordsSum(coords))) || !coords.isEmpty()){
             coords.remove(coords.size()-1);
             result.remove(ordersMap.get(coords));
         }

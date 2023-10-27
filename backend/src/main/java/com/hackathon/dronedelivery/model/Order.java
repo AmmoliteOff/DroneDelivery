@@ -29,8 +29,11 @@ public class Order {
 
     private Double weight;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<Product> products;
+
+    @ManyToOne
+    private Drone drone;
 
     public double getWeight(){
         double res = 0;
