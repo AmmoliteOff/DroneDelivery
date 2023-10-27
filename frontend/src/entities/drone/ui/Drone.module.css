@@ -1,0 +1,71 @@
+.drone {
+    background-color: var(--fourth-background-color);
+    min-height: 75px;
+
+    display: flex;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 24px;
+}
+
+.title {
+    font-size: 30px;
+}
+
+.drone {
+    display: flex;
+}
+
+.droneInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    gap: 15px;
+}
+
+.drone_clickable {
+    cursor: pointer;
+}
+
+.droneImg {
+    width: 391px;
+    height: 220px;
+}
+
+.droneWeightBlock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.charging {
+    width: 30px;
+    height: 20px;
+    border-radius: 10px;
+
+    border: 2px solid silver;
+}
+
+.charging_low {
+    background-color: var(--red);
+
+}
+
+.charging_medium {
+background-color: yellow;
+}
+
+.charging_big {
+    background-color: var(--green);
+}
+
+.droneChargingBlock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.weight {
+    width: 30px;
+    height: 30px;
+}
