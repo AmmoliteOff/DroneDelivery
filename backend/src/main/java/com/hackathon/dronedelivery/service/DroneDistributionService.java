@@ -68,6 +68,7 @@ public class DroneDistributionService {
                 produceMatch();
             }
             else {
+                orderPool.remove(ordersToDeliver);
                 match(drone, ordersToDeliver);
                  //MATCH DONE
             }

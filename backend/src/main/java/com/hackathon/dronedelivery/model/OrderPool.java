@@ -32,6 +32,12 @@ public class OrderPool{
         return c;
     }
 
+    public void remove(List<Order> orders){
+        for (Order order:
+             orders) {
+            orderPool.remove(order);
+        }
+    }
     public Order peek(){
         return orderPool.get(orderPool.size()-1);
     }
