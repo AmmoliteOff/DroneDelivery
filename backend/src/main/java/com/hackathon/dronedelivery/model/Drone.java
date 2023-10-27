@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "drone")
-public class Drone {
+public abstract class Drone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +23,12 @@ public class Drone {
     @OneToMany
     private List<Order> orders;
 
+    private double charge;
 
+    private double fullChargeDistance;
+
+    private double maxWeight;
+    public boolean isChargeEnoughToDeliver(double distance){
+        return fullChargeDistance*(charge/100) > distance && (fullChargeDistance-distance/fullChargeDistance)*100>=25;
+    }
 }

@@ -1,14 +1,14 @@
 package com.hackathon.dronedelivery.model;
 
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 public class OrderPool{
-    Deque<Order> orderPool = new ArrayDeque<Order>();
+    @Getter
+    List<Order> orderPool = new LinkedList<>();
     OrderPool instance = null;
     private OrderPool(){
 
@@ -26,7 +26,13 @@ public class OrderPool{
         return orderPool.isEmpty();
     }
 
-    public Order get(){
-        return orderPool.poll();
+    public Order poll(){
+        var c = orderPool.get(orderPool.size()-1);
+        orderPool.remove(c);
+        return c;
+    }
+
+    public Order peek(){
+        return orderPool.get(orderPool.size()-1);
     }
 }

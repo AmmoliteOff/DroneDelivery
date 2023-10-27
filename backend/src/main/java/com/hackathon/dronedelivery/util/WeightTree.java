@@ -2,6 +2,9 @@ package com.hackathon.dronedelivery.util;
 
 import com.hackathon.dronedelivery.model.Order;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WeightTree {
     WeightTree parent;
     WeightTree left;
@@ -12,7 +15,14 @@ public class WeightTree {
 
     double cumulativeValue;
 
-    public WeightTree(int initialCapacity){
+    public List<Order> getLeft(){
+        List<Order> result = new ArrayList<>();
+        if(this.left!=null)
+            result.addAll(this.left.getLeft());
+        return result;
+    }
+
+    public WeightTree(double initialCapacity){
         this.initialCapacity = initialCapacity;
         cumulativeValue = 0;
     }
