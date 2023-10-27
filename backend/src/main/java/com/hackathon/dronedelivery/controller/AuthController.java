@@ -4,6 +4,7 @@ import com.hackathon.dronedelivery.enums.Role;
 import com.hackathon.dronedelivery.model.Authority;
 import com.hackathon.dronedelivery.model.User;
 import com.hackathon.dronedelivery.repository.UserRepository;
+import com.hackathon.dronedelivery.service.AuthService;
 import com.hackathon.dronedelivery.util.generators.Sha256Generator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,14 +22,10 @@ import java.util.List;
 @RequestMapping("api")
 public class AuthController {
 
-    private final UserRepository userRepository;
+    private final AuthService authService;
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody User user){
-        user.setPassword(Sha256Generator.generate(user.getPassword()));
-        var auth = new Authority(Role.DRONES_SENDER);
-        auth.setUser(user);
-        user.setAuthorities(List.of(auth));
-        userRepository.save(user);
+        authService.register(user);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

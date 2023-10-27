@@ -1,7 +1,10 @@
 package com.hackathon.dronedelivery.service;
 
 import com.hackathon.dronedelivery.model.*;
+import com.hackathon.dronedelivery.repository.DroneRepository;
+import com.hackathon.dronedelivery.repository.RequestRepository;
 import com.hackathon.dronedelivery.util.WeightTree;
+import lombok.AllArgsConstructor;
 import org.aspectj.weaver.ast.Or;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +18,34 @@ import java.net.URL;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class DroneDistributionService {
-    DronePool dronePool;
-    OrderPool orderPool;
-    public DroneDistributionService(@Autowired DronePool dronePool,
-                                    @Autowired OrderPool orderPool){
-        this.dronePool = dronePool;
-        this.orderPool = orderPool;
-    }
+    private final DronePool dronePool;
+    private final OrderPool orderPool;
+    private final RequestRepository requestRepository;
+
+    private final DroneRepository droneRepository;
+//    public DroneDistributionService(@Autowired DronePool dronePool,
+//                                    @Autowired OrderPool orderPool){
+//        this.dronePool = dronePool;
+//        this.orderPool = orderPool;
+//    }
 
     public void AddOrder(Order order) throws IOException {
         orderPool.add(order);
         produceMatch();
+    }
+
+    private void match(Drone drone, List<Order> orders){
+        drone.setOrders(orders);
+        droneRepository.save(drone);
+
+        var request = new DroneSendRequest();
+        request.setDrone(drone);
+        request.setStatus("Создана");
+        request.setOrderList(orders);
+
+        requestRepository.save(request);
     }
 
     private boolean produceMatch() throws IOException {
@@ -48,7 +67,8 @@ public class DroneDistributionService {
                 produceMatch();
             }
             else {
-                drone.setOrders(ordersToDeliver);
+                match(drone, ordersToDeliver);
+                 //MATH DONE
             }
             return true;
         }

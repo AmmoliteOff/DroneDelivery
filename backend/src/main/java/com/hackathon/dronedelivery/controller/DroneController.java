@@ -4,6 +4,7 @@ import com.hackathon.dronedelivery.model.Drone;
 
 import com.hackathon.dronedelivery.service.DroneService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,8 @@ public class DroneController {
     }
 
     @PostMapping("/addDrone")
-    public ResponseEntity<List<Drone>> addDrone(@RequestBody Drone drone) {
-        return ResponseEntity.ok(droneService.add(drone));
+    public ResponseEntity<?> addDrone(@RequestBody Drone drone) {
+        droneService.add(drone);
+        return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.OK);
     }
 }
