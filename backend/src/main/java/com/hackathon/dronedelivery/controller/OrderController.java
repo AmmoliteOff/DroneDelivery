@@ -2,11 +2,14 @@ package com.hackathon.dronedelivery.controller;
 
 import com.hackathon.dronedelivery.model.Notification;
 import com.hackathon.dronedelivery.model.Order;
+import com.hackathon.dronedelivery.service.DroneDistributionService;
 import com.hackathon.dronedelivery.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +20,11 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final DroneDistributionService droneDistributionService;
 
     @PostMapping("/acceptOrder")
-    public Notification acceptOrder(@RequestBody Order order) {
+    public Notification acceptOrder(@RequestBody Order order) throws IOException {
+        droneDistributionService.AddOrder(order);
         return new Notification();
     }
 
