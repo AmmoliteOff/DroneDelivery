@@ -66,8 +66,8 @@ public class DroneDistributionService {
                             drone.getCurrentLatitude()));
 
             if(ordersToDeliver.isEmpty()){
-                //droneService.setBadDrone(drone);
                 produceMatch();
+                dronePool.add(drone);
             }
             else {
                 orderPool.remove(ordersToDeliver);

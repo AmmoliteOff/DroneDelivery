@@ -25,4 +25,8 @@ public class DroneService {
         return droneRepository.findById(id);
     }
 
+    public boolean sendDrone(Drone drone){
+        //Some implementation
+        return false; //edit
+    }
 }
