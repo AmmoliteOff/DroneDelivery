@@ -45,7 +45,6 @@ public class DroneDistributionService {
         var request = new DroneSendRequest();
         request.setDrone(persistDrone);
         request.setStatus("Создана");
-        request.setOrderList(persistOrders);
         requestService.save(request);
     }
 
