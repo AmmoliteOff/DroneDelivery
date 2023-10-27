@@ -13,4 +13,13 @@ public class GeoCoords {
         this.longitude = Double.parseDouble(pos.substring(0, pos.indexOf(' ')));
         this.latitude = Double.parseDouble(pos.substring(pos.indexOf(' '), 0));
     }
+
+    public GeoCoords(double longitude, double latitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public GeoCoords(){
+
+    }
 }
