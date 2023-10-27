@@ -1,12 +1,17 @@
 package com.hackathon.dronedelivery.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "drone_send_request")
 public class DroneSendRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
