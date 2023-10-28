@@ -4,7 +4,7 @@ export interface User {
     id: string;
     name: string;
     surname: string;
-    role: Role;
+    userRole: Role;
 }
 
 export type UserModel = {

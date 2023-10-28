@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { type LoginProps, type LoginResponse } from "../api/types";
 
-import { login, logout } from "../api/requests";
+import { login } from "../api/requests";
 import { AxiosError } from "axios";
 
 export const loginAsync = createAsyncThunk<LoginResponse, LoginProps>(
@@ -16,7 +16,3 @@ export const loginAsync = createAsyncThunk<LoginResponse, LoginProps>(
         }
     }
 );
-
-export const logoutAsync = createAsyncThunk("user/logout", () => {
-    return logout();
-});

@@ -5,6 +5,8 @@ export interface LoginProps {
     password: string;
 }
 
-export interface LoginResponse extends User {
-    accessToken: string;
-}
+// export interface LoginResponse extends User {
+//     accessToken: string;
+// }
+
+export type LoginResponse = User;

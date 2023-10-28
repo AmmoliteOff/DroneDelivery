@@ -32,9 +32,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
         dispatch(loginAsync(data))
             .unwrap()
             .then((data) => {
-                if (data.role === "DRONES_SENDER") {
+                if (data.userRole === "DRONES_SENDER") {
                     navigate("/home");
-                } else if (data.role === "DRONES_MASTER") {
+                } else if (data.userRole === "DRONES_MASTER") {
                     navigate("/drones");
                 }
                 if (onComplete) onComplete();

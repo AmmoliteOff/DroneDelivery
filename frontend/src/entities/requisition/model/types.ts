@@ -22,8 +22,11 @@ export interface Order {
     longitude: number;
 }
 
+export type ReqStatus = "CREATED" | "ACCEPTED" | "REJECTED";
+
 // -------------------------->
 export interface Requisition {
+    status: ReqStatus;
     id: string;
     drone: IDrone;
     orders: Order[];

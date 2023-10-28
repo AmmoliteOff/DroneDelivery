@@ -35,8 +35,6 @@ export const ReqMax: React.FC<OrderMaxProps> = ({ req, renderDrone }) => {
         };
     }, [req]);
 
-    console.log(addedProducts);
-
     return (
         <div className={css.orderMax}>
             <div className={css.orderInfo}>

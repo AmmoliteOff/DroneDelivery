@@ -7,13 +7,11 @@ export const login = async (props: LoginProps) => {
         props
     );
 
-    const accessToken: string = response.headers["Authorization"];
-
-    console.log({ ...response.data, accessToken });
-    return { ...response.data, accessToken };
+    // const accessToken: string = response.headers["Authorization"];
+    return { ...response.data };
 };
 
-export const logout = async () => {
-    const { data } = await api.post(config.paths.user.logout);
-    return data.data;
-};
+// export const logout = async () => {
+//     const { data } = await api.post(config.paths.user.logout);
+//     return data.data;
+// };

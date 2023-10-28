@@ -47,7 +47,8 @@ export const Drone: React.FC<DroneProps> = ({ drone, onClick, weight }) => {
                             variant="small"
                             src="https://res.cloudinary.com/do1tmxguz/image/upload/v1698408831/muiofvmjclik3xwe2mu2.png"
                         />
-                        {weight}/{drone.maxWeight} кг
+                        {weight !== undefined && `${weight}/`}
+                        {drone.maxWeight} кг
                     </div>
                 </div>
             </div>
