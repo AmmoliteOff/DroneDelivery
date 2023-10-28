@@ -17,7 +17,7 @@ import java.util.List;
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long droneSendRequest;
+    private long id;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Drone drone;
