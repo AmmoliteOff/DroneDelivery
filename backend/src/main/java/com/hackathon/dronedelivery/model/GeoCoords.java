@@ -1,8 +1,6 @@
 package com.hackathon.dronedelivery.model;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class GeoCoords {

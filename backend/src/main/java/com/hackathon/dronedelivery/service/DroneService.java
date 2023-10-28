@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.dronedelivery.model.Drone;
 import com.hackathon.dronedelivery.model.GeoCoords;
 import com.hackathon.dronedelivery.repository.DroneRepository;
@@ -65,8 +66,9 @@ public class DroneService {
 // Создание объекта для преобразования в JSON
             String jsonInputString  = "";
             if(object!=null) {
-                JSONObject jsonObject = new JSONObject(object);
-                jsonInputString = jsonObject.toString();
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                jsonInputString = objectMapper.writeValueAsString(object);
             }
 // Отправка данных
             out.writeBytes(jsonInputString);
