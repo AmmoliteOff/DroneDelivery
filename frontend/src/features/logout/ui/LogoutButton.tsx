@@ -3,7 +3,7 @@ import css from "./LogoutButton.module.css";
 import { Button } from "shared/ui";
 
 interface LogoutButtonProps {
-    variant?: "text" | "blackWhite";
+    variant?: "text" | "button";
 }
 
 export const LogoutButton: React.FC<LogoutButtonProps> = ({

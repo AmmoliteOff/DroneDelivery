@@ -3,6 +3,9 @@ export interface IDrone {
     img?: string;
     maxWeight: number;
     charging: number;
+
+    latitude: number;
+    longitude: number;
 }
 
 export interface DroneModel {

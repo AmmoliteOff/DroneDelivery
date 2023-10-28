@@ -13,17 +13,24 @@ export interface Customer {
     telephoneNumber: string;
 }
 
-// -------------------------->
 export interface Order {
     id: string;
-    deliveryAdress: string;
-    drone: IDrone;
-    products: Product[];
     customer: Customer;
+    products: Product[];
+    deliveryAdress: string;
+    latitude: number;
+    longitude: number;
+}
+
+// -------------------------->
+export interface Requisition {
+    id: string;
+    drone: IDrone;
+    orders: Order[];
 }
 // <-------------------------
 
 export interface OrderModel {
-    orders: Order[];
+    requisitions: Requisition[];
     isLoading: boolean;
 }

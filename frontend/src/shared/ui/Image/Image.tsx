@@ -4,7 +4,7 @@ import cn from "classnames";
 
 interface ImageProps {
     src?: string;
-    variant: "small" | "medium" | "big";
+    variant?: "small" | "medium" | "big";
     className?: string;
     onClick?: () => void;
 }

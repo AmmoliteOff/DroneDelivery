@@ -1,20 +1,16 @@
-import css from "./OrderMini.module.css";
+import css from "./ReqMini.module.css";
 
 import cn from "classnames";
 
-import { type Order } from "entities/order/model";
+import { type Requisition } from "entities/requisition";
 
-interface OrderMiniProps {
-    order: Order;
+interface ReqMiniProps {
+    req: Requisition;
     onClick?: () => void;
     active?: boolean;
 }
 
-export const OrderMini: React.FC<OrderMiniProps> = ({
-    order,
-    onClick,
-    active,
-}) => {
+export const ReqMini: React.FC<ReqMiniProps> = ({ req, onClick, active }) => {
     const modifier = css[`order_active`];
     const clazz = cn(css.order, {
         [modifier]: active,
@@ -22,7 +18,7 @@ export const OrderMini: React.FC<OrderMiniProps> = ({
 
     return (
         <div onClick={onClick} className={clazz}>
-            Заказ <span>#{order.id}</span>
+            Заказ <span>#{req.id}</span>
         </div>
     );
 };

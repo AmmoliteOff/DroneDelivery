@@ -8,6 +8,7 @@ import { Image } from "shared/ui";
 interface DroneProps {
     drone: IDrone;
     onClick?: () => void;
+    weight?: number;
 }
 
 interface DroneCharhingIndicatorProps {
@@ -26,7 +27,7 @@ const DroneCharhingIndicator: React.FC<DroneCharhingIndicatorProps> = ({
     return <div className={clazz}></div>;
 };
 
-export const Drone: React.FC<DroneProps> = ({ drone, onClick }) => {
+export const Drone: React.FC<DroneProps> = ({ drone, onClick, weight }) => {
     const clazz = cn(css.drone, {
         [css["drone_clickable"]]: !!onClick,
     });
@@ -46,7 +47,7 @@ export const Drone: React.FC<DroneProps> = ({ drone, onClick }) => {
                             variant="small"
                             src="https://res.cloudinary.com/do1tmxguz/image/upload/v1698408831/muiofvmjclik3xwe2mu2.png"
                         />
-                        {drone.maxWeight} кг
+                        {weight}/{drone.maxWeight} кг
                     </div>
                 </div>
             </div>

@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.3.2",
+		"@pbe/react-yandex-maps": "^1.2.5",
 		"@reduxjs/toolkit": "^1.9.7",
 		"axios": "^1.5.1",
 		"classnames": "^2.3.2",

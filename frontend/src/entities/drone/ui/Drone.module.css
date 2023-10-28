@@ -69,3 +69,20 @@ background-color: yellow;
     width: 30px;
     height: 30px;
 }
+
+@media (max-width: 1400px)  {
+    .droneImg {
+        width: 222px;
+        height: 172px;
+    }
+    .title {
+        font-size: 24px;
+    }
+    
+    .droneInfo {
+        font-size: 17px;
+    }
+}
+
+
+

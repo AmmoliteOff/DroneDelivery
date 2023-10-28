@@ -8,6 +8,7 @@ const initialState: UserModel = {
         id: "1",
         name: "Иван",
         surname: "Иванов",
+        role: "DRONES_SENDER",
     },
     isAuth: true,
     isLoading: false,

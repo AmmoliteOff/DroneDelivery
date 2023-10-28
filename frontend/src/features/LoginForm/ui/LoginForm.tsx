@@ -2,6 +2,7 @@ import css from "./LoginForm.module.css";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "shared/ui";
 import {
@@ -16,6 +17,7 @@ interface LoginFormProps {
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
+    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const {
         setError,
@@ -29,7 +31,12 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
     const onSubmit = (data: LoginFormSchema) => {
         dispatch(loginAsync(data))
             .unwrap()
-            .then(() => {
+            .then((data) => {
+                if (data.role === "DRONES_SENDER") {
+                    navigate("/home");
+                } else if (data.role === "DRONES_MASTER") {
+                    navigate("/drones");
+                }
                 if (onComplete) onComplete();
             })
             .catch((error: { message: string }) => {
@@ -61,7 +68,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
                 />
                 <p className={css.error}>{errors.password?.message}</p>
             </div>
-            <Button type="submit" className={css.button} variant="blackWhite">
+            <Button type="submit" className={css.button} variant="button">
                 Войти
             </Button>
         </form>

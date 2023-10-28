@@ -4,18 +4,24 @@ import { ComponentProps } from "react";
 import cn from "classnames";
 
 interface ButtonProps extends ComponentProps<"button"> {
-    variant?: "text" | "blackWhite";
+    variant?: "text" | "button";
 }
 
 export const Button: React.FC<ButtonProps> = ({
-    variant = "blackWhite",
+    variant = "button",
     children,
     className,
+    disabled,
     ...props
 }) => {
-    const clazz = cn(css.button, css[`button_${variant}`], className);
+    const clazz = cn(
+        css.button,
+        css[`button_${variant}`],
+        className,
+        disabled && css.disabled
+    );
     return (
-        <button {...props} className={clazz}>
+        <button {...props} className={clazz} disabled={disabled}>
             {children}
         </button>
     );

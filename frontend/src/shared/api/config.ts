@@ -5,7 +5,7 @@ interface ConfigAPI {
             login: string;
             logout: string;
         };
-        order: {
+        reqs: {
             get: string;
         };
 
@@ -22,8 +22,8 @@ export const config: ConfigAPI = {
             login: "/api/authenticate",
             logout: "/api/logout",
         },
-        order: {
-            get: "/api/orders",
+        reqs: {
+            get: "/api/requests",
         },
         drones: {
             get: "/api/drones",

@@ -12,7 +12,7 @@ export const ProfilePage = () => {
         <div className={css.block}>
             <ProfileCard
                 user={user}
-                logout={<LogoutButton variant="blackWhite" />}
+                logout={<LogoutButton variant="button" />}
             />
         </div>
     );
