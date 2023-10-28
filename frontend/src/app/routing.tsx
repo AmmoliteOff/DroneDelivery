@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import { useAppSelector } from "shared/model";
+import { userSelector } from "entities/user";
 
 import { Layout } from "shared/ui";
 
@@ -31,9 +32,9 @@ export const Routing = () => {
             <Route path="/login" element={<LoginPage />} />
             <Route element={<Layout header={<Header />} />}>
                 <Route path="/home" element={<HomePage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/drones" element={<DronesPage />} />
                 <Route path="/drones/:droneId" element={<DronePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
             </Route>
         </Routes>
     );

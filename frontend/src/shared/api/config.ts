@@ -11,6 +11,8 @@ interface ConfigAPI {
 
         drones: {
             get: string;
+            send: string;
+            add: string;
         };
     };
 }
@@ -27,6 +29,8 @@ export const config: ConfigAPI = {
         },
         drones: {
             get: "/api/drones",
+            send: "/api/sendDrone",
+            add: "/api/drones/new",
         },
     },
 };

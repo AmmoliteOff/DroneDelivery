@@ -5,10 +5,13 @@ import { useState, useEffect } from "react";
 import { Button, Image, YandexMap } from "shared/ui";
 
 import { type Requisition, type Product } from "entities/requisition";
+import { api, config } from "shared/api";
 
 interface OrderMaxProps {
     req: Requisition;
     renderDrone: (weight: number) => React.ReactNode;
+    sended: boolean;
+    addToSended: (id: number) => void;
 }
 
 interface Added {
@@ -17,7 +20,12 @@ interface Added {
     longitude: number;
 }
 
-export const ReqMax: React.FC<OrderMaxProps> = ({ req, renderDrone }) => {
+export const ReqMax: React.FC<OrderMaxProps> = ({
+    req,
+    renderDrone,
+    sended,
+    addToSended,
+}) => {
     const [addedProducts, setAddedProducts] = useState<Added[]>([]);
 
     const productsWeight = addedProducts.reduce(
@@ -27,6 +35,14 @@ export const ReqMax: React.FC<OrderMaxProps> = ({ req, renderDrone }) => {
 
     const onClickAddProduct = (added: Added) => {
         setAddedProducts((old) => [...old, added]);
+    };
+
+    const onClickSend = () => {
+        if (productsWeight > 0) {
+            addToSended(req.drone.id);
+
+            api.post(config.paths.drones.send, req.drone);
+        }
     };
 
     useEffect(() => {
@@ -51,9 +67,17 @@ export const ReqMax: React.FC<OrderMaxProps> = ({ req, renderDrone }) => {
                 <div className={css.orderInfoBlock}>
                     {renderDrone(productsWeight)}
                     <div className={css.droneButtons}>
-                        <Button className={css.sendDroneButton}>
-                            Отправить дрона
-                        </Button>
+                        {sended ? (
+                            "Дрон отправлен"
+                        ) : (
+                            <Button
+                                disabled={productsWeight <= 0}
+                                onClick={onClickSend}
+                                className={css.sendDroneButton}
+                            >
+                                Отправить дрона
+                            </Button>
+                        )}
                         {/* <Button className={css.removeButton}>
                         Отменить заказ целиком
                     </Button> */}

@@ -1,14 +1,8 @@
 import css from "./LoginPage.module.css";
-
-import { useNavigate } from "react-router-dom";
 import { LoginForm } from "features/LoginForm";
 
 export const LoginPage = () => {
-    const navigate = useNavigate();
-
-    const onComplete = () => {
-        navigate("/home");
-    };
+    const onComplete = () => {};
     return (
         <div className={css.block}>
             <div className={css.content}>

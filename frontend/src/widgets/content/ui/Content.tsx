@@ -86,6 +86,8 @@ export const Content = () => {
 
     const [selectedReq, setSelectedReq] = useState<Requisition | undefined>();
 
+    const [sendedDrones, setSendedDrones] = useState<number[]>([]);
+
     const onClickReq = (req: Requisition) => {
         setSelectedReq(req);
     };
@@ -93,6 +95,10 @@ export const Content = () => {
     useEffect(() => {
         dispatch(getRequisitionsAsync());
     }, []);
+
+    const addToSended = (id: number) => {
+        // setSendedDrones((old) => [...old, id]);
+    };
 
     if (isLoadingReq || !reqs) return <h1>Загрузка...</h1>;
 
@@ -114,6 +120,12 @@ export const Content = () => {
             <div className={css.ordersMax}>
                 {selectedReq ? (
                     <ReqMax
+                        addToSended={addToSended}
+                        sended={
+                            !!sendedDrones.find(
+                                (item) => item === selectedReq.id
+                            )
+                        }
                         req={selectedReq}
                         renderDrone={(weight: number) => (
                             <Drone drone={selectedReq.drone} weight={weight} />

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAppSelector, useAppDispatch } from "shared/model";
+import { api } from "shared/api";
 import {
     dronesLoadingSelector,
     dronesSelector,
@@ -12,6 +13,7 @@ import {
 } from "entities/drone";
 
 import { Drone } from "entities/drone";
+import { config } from "shared/api";
 import { useEffect } from "react";
 import { Button } from "shared/ui";
 
@@ -21,15 +23,10 @@ export const DronesPage = () => {
     const drones = useAppSelector(dronesSelector);
 
     const [formData, setFormData] = useState({
-        droneCharge: "",
-        maxDistance: "",
+        charge: "",
+        fullChargeDistance: "",
         maxWeight: "",
     });
-
-    const onSubmit = (e: any) => {
-        e.preventDefault();
-        console.log("Отправляем данные:", formData);
-    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -38,6 +35,12 @@ export const DronesPage = () => {
             [name]: value,
         });
     };
+
+    // console.log({
+    //     droneCharge: "",
+    //     maxDistance: "",
+    //     maxWeight: "",
+    // });
 
     const isLoading = useAppSelector(dronesLoadingSelector);
 
@@ -49,6 +52,12 @@ export const DronesPage = () => {
         dispatch(getDronesAsync());
     }, []);
 
+    const onSubmit = (e) => {
+        e.preventDefault();
+        console.log("Отправляем данные:", formData);
+        api.post(config.paths.drones.add, formData);
+    };
+
     if (isLoading) return <h1>Загрузка дронов...</h1>;
 
     return (
@@ -57,7 +66,8 @@ export const DronesPage = () => {
                 <h2 className={css.addTitle}>Добавить дрона</h2>
                 <form onSubmit={onSubmit} className={css.form}>
                     <input
-                        value={formData.droneCharge}
+                        value={formData.charge}
+                        name="charge"
                         onChange={handleInputChange}
                         type="text"
                         placeholder="Заряд дрона"
@@ -66,7 +76,7 @@ export const DronesPage = () => {
                         name="fullChargeDistance"
                         type="text"
                         placeholder="Макс. расстояние"
-                        value={formData.maxDistance}
+                        value={formData.fullChargeDistance}
                         onChange={handleInputChange}
                     />
                     <input

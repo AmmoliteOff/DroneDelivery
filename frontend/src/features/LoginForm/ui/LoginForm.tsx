@@ -2,6 +2,7 @@ import css from "./LoginForm.module.css";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "shared/ui";
 import {
@@ -15,7 +16,9 @@ interface LoginFormProps {
     onComplete?: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
+export const LoginForm: React.FC<LoginFormProps> = () => {
+    const navigate = useNavigate();
+
     const dispatch = useAppDispatch();
     const {
         setError,
@@ -29,13 +32,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onComplete }) => {
     const onSubmit = (data: LoginFormSchema) => {
         dispatch(loginAsync(data))
             .unwrap()
-            .then(() => {
-                // if (data.userRole === "DRONES_SENDER") {
-                //     navigate("/home");
-                // } else if (data.userRole === "DRONES_MASTER") {
-                //     navigate("/drones");
-                // }
-                if (onComplete) onComplete();
+            .then((data) => {
+                if (data.userRole === "DRONES_SENDER") {
+                    navigate("/home");
+                } else if (data.userRole === "DRONES_MASTER") {
+                    navigate("/drones");
+                }
+                // if (onComplete) onComplete(data);
             })
             .catch((error: { message: string }) => {
                 setError("password", {
