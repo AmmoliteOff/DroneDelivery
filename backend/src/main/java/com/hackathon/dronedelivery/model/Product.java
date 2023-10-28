@@ -24,4 +24,6 @@ public class Product {
     @JoinColumn(name = "order_id")
     @JsonIgnore
     private Order order;
+
+    private String img;
 }

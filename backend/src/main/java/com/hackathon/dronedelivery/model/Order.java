@@ -26,9 +26,10 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus = OrderStatus.SENT_FOR_ASSEMBLY;
 
+    @Transient
     private Double weight;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Product> products;
 
     @ManyToOne
