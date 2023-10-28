@@ -35,6 +35,11 @@ public class Order {
     @JsonIgnore
     private Drone drone;
 
+
+    private double longitude;
+
+    private double latitude;
+
     public double getWeight(){
         double res = 0;
         for (Product product:
