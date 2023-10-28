@@ -1,0 +1,150 @@
+Index: backend/src/main/java/com/hackathon/dronedelivery/model/Order.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.hackathon.dronedelivery.model;\r\n\r\nimport com.hackathon.dronedelivery.enums.Status;\r\nimport jakarta.persistence.*;\r\nimport lombok.AllArgsConstructor;\r\nimport lombok.Builder;\r\nimport lombok.Data;\r\nimport lombok.NoArgsConstructor;\r\n\r\nimport java.util.List;\r\n\r\n@Data\r\n@Entity\r\n@Builder\r\n@AllArgsConstructor\r\n@NoArgsConstructor\r\n@Table(name = \"orders\")\r\npublic class Order {\r\n    @Id\r\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\r\n    private Long id;\r\n\r\n    private String customerAddress;\r\n    private String customerName;\r\n    private String customerNumber;\r\n\r\n    @Enumerated(EnumType.STRING)\r\n    private Status status;\r\n    private Double weight;\r\n\r\n    @OneToMany\r\n    private List<Product> products;\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/model/Order.java b/backend/src/main/java/com/hackathon/dronedelivery/model/Order.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/model/Order.java	(revision 832680a9ed0f6f6684fc2b54c710ffa9cf246f30)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/model/Order.java	(date 1698406891749)
+@@ -1,6 +1,6 @@
+ package com.hackathon.dronedelivery.model;
+ 
+-import com.hackathon.dronedelivery.enums.Status;
++import com.hackathon.dronedelivery.enums.OrderStatus;
+ import jakarta.persistence.*;
+ import lombok.AllArgsConstructor;
+ import lombok.Builder;
+@@ -25,11 +25,23 @@
+     private String customerNumber;
+ 
+     @Enumerated(EnumType.STRING)
+-    private Status status;
++    private OrderStatus orderStatus;
++
+     private Double weight;
+ 
+     @OneToMany
+     private List<Product> products;
+ 
+ 
++    @Override
++    public String toString() {
++        return "Order{" +
++                "customerAddress='" + customerAddress + '\'' +
++                ", customerName='" + customerName + '\'' +
++                ", customerNumber='" + customerNumber + '\'' +
++                ", orderStatus=" + orderStatus +
++                ", weight=" + weight +
++                ", products=" + products +
++                '}';
++    }
+ }
+Index: backend/src/main/java/com/hackathon/dronedelivery/enums/Status.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/enums/Status.java b/backend/src/main/java/com/hackathon/dronedelivery/enums/OrderStatus.java
+rename from backend/src/main/java/com/hackathon/dronedelivery/enums/Status.java
+rename to backend/src/main/java/com/hackathon/dronedelivery/enums/OrderStatus.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/enums/Status.java	(revision 832680a9ed0f6f6684fc2b54c710ffa9cf246f30)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/enums/OrderStatus.java	(date 1698404895946)
+@@ -1,6 +1,6 @@
+ package com.hackathon.dronedelivery.enums;
+ 
+-public enum Status {
++public enum OrderStatus {
+     SENT_FOR_ASSEMBLY,
+     ASSEMBLES,
+     SHIPPED,
+Index: backend/src/main/java/com/hackathon/dronedelivery/model/Notification.java
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/model/Notification.java b/backend/src/main/java/com/hackathon/dronedelivery/model/Notification.java
+deleted file mode 100644
+--- a/backend/src/main/java/com/hackathon/dronedelivery/model/Notification.java	(revision 832680a9ed0f6f6684fc2b54c710ffa9cf246f30)
++++ /dev/null	(revision 832680a9ed0f6f6684fc2b54c710ffa9cf246f30)
+@@ -1,6 +0,0 @@
+-package com.hackathon.dronedelivery.model;
+-
+-
+-public class Notification {
+-
+-}
+Index: backend/src/main/java/com/hackathon/dronedelivery/util/RequestToMarketplace.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/util/RequestToMarketplace.java b/backend/src/main/java/com/hackathon/dronedelivery/util/RequestToMarketplace.java
+new file mode 100644
+--- /dev/null	(date 1698406891755)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/util/RequestToMarketplace.java	(date 1698406891755)
+@@ -0,0 +1,27 @@
++package com.hackathon.dronedelivery.util;
++
++import com.hackathon.dronedelivery.model.Order;
++import org.springframework.http.HttpEntity;
++import org.springframework.http.HttpHeaders;
++import org.springframework.http.MediaType;
++import org.springframework.http.ResponseEntity;
++import org.springframework.web.client.RestTemplate;
++
++public class RequestToMarketplace {
++    public static void updateStatus(Order order) {
++        RestTemplate restTemplate = new RestTemplate();
++
++        String url = "https://marketplace.com/api/order";
++
++        HttpHeaders headers = new HttpHeaders();
++        headers.setContentType(MediaType.APPLICATION_JSON);
++
++
++        HttpEntity<String> requestEntity = new HttpEntity<>(order.toString(), headers);
++
++        ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, requestEntity, String.class);
++
++        String response = responseEntity.getBody();
++        System.out.println("Ответ от сервера: " + response);
++    }
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/enums/DroneStatus.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/enums/DroneStatus.java b/backend/src/main/java/com/hackathon/dronedelivery/enums/DroneStatus.java
+new file mode 100644
+--- /dev/null	(date 1698405749757)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/enums/DroneStatus.java	(date 1698405749757)
+@@ -0,0 +1,7 @@
++package com.hackathon.dronedelivery.enums;
++
++public enum DroneStatus {
++    DELIVERS_THE_ORDER,
++    READY_FOR_DELIVERY,
++    ON_SERVICE
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/controller/OrderController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.hackathon.dronedelivery.controller;\r\n\r\nimport com.hackathon.dronedelivery.model.Notification;\r\nimport com.hackathon.dronedelivery.model.Order;\r\nimport com.hackathon.dronedelivery.service.DroneDistributionService;\r\nimport com.hackathon.dronedelivery.service.OrderService;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.*;\r\n\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n\r\n@RestController\r\n@RequiredArgsConstructor\r\n@RequestMapping(\"api\")\r\npublic class OrderController {\r\n\r\n    private final OrderService orderService;\r\n    private final DroneDistributionService droneDistributionService;\r\n\r\n    @PostMapping(\"/acceptOrder\")\r\n    public ResponseEntity acceptOrder(@RequestBody Order order) throws IOException {\r\n        droneDistributionService.AddOrder(order);\r\n        return new ResponseEntity(HttpStatus.OK);\r\n    }\r\n\r\n    @GetMapping(\"/orders\")\r\n    public ResponseEntity<List<Order>> getOrders() {\r\n        List<Order> orders = new ArrayList<>();\r\n        for (long i = 0; i < 10; i++) {\r\n            orders.add(Order.builder()\r\n                            .id(i)\r\n                            .customerName(\"Вася\")\r\n                            .customerNumber(\"234-234\")\r\n                            .products(new ArrayList<>())\r\n                            .weight(0.0)\r\n                            .customerAddress(\"Воронеж\")\r\n                            .build());\r\n        }\r\n        return ResponseEntity.ok(orders);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/controller/OrderController.java b/backend/src/main/java/com/hackathon/dronedelivery/controller/OrderController.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/controller/OrderController.java	(revision 832680a9ed0f6f6684fc2b54c710ffa9cf246f30)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/controller/OrderController.java	(date 1698406891743)
+@@ -1,11 +1,9 @@
+ package com.hackathon.dronedelivery.controller;
+ 
+-import com.hackathon.dronedelivery.model.Notification;
+ import com.hackathon.dronedelivery.model.Order;
+ import com.hackathon.dronedelivery.service.DroneDistributionService;
+ import com.hackathon.dronedelivery.service.OrderService;
+ import lombok.RequiredArgsConstructor;
+-import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.web.bind.annotation.*;

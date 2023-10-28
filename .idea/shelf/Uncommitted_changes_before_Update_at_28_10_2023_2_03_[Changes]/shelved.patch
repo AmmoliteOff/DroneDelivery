@@ -1,0 +1,792 @@
+Index: backend/src/main/java/com/hackathon/dronedelivery/controller/AuthController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.hackathon.dronedelivery.controller;\r\n\r\nimport com.hackathon.dronedelivery.enums.Role;\r\nimport com.hackathon.dronedelivery.model.Authority;\r\nimport com.hackathon.dronedelivery.model.User;\r\nimport com.hackathon.dronedelivery.repository.UserRepository;\r\nimport com.hackathon.dronedelivery.service.AuthService;\r\nimport com.hackathon.dronedelivery.util.generators.Sha256Generator;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.http.ResponseEntity;\r\nimport org.springframework.web.bind.annotation.PostMapping;\r\nimport org.springframework.web.bind.annotation.RequestBody;\r\nimport org.springframework.web.bind.annotation.RequestMapping;\r\nimport org.springframework.web.bind.annotation.RestController;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n@RestController\r\n@RequiredArgsConstructor\r\n@RequestMapping(\"api\")\r\npublic class AuthController {\r\n\r\n    private final AuthService authService;\r\n    @PostMapping(\"/register\")\r\n    public ResponseEntity register(@RequestBody User user){\r\n        authService.register(user);\r\n        return new ResponseEntity(HttpStatus.OK);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/controller/AuthController.java b/backend/src/main/java/com/hackathon/dronedelivery/controller/AuthController.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/controller/AuthController.java	(revision 0795e3faa89e683adabb70e7a206371aa60bcbfc)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/controller/AuthController.java	(date 1698446919385)
+@@ -1,31 +1,31 @@
+-package com.hackathon.dronedelivery.controller;
+-
+-import com.hackathon.dronedelivery.enums.Role;
+-import com.hackathon.dronedelivery.model.Authority;
+-import com.hackathon.dronedelivery.model.User;
+-import com.hackathon.dronedelivery.repository.UserRepository;
+-import com.hackathon.dronedelivery.service.AuthService;
+-import com.hackathon.dronedelivery.util.generators.Sha256Generator;
+-import lombok.RequiredArgsConstructor;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.PostMapping;
+-import org.springframework.web.bind.annotation.RequestBody;
+-import org.springframework.web.bind.annotation.RequestMapping;
+-import org.springframework.web.bind.annotation.RestController;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-@RestController
+-@RequiredArgsConstructor
+-@RequestMapping("api")
+-public class AuthController {
+-
+-    private final AuthService authService;
+-    @PostMapping("/register")
+-    public ResponseEntity register(@RequestBody User user){
+-        authService.register(user);
+-        return new ResponseEntity(HttpStatus.OK);
+-    }
+-}
++//package com.hackathon.dronedelivery.controller;
++//
++//import com.hackathon.dronedelivery.enums.Role;
++//import com.hackathon.dronedelivery.model.Authority;
++//import com.hackathon.dronedelivery.model.User;
++//import com.hackathon.dronedelivery.repository.UserRepository;
++//import com.hackathon.dronedelivery.service.AuthService;
++//import com.hackathon.dronedelivery.util.generators.Sha256Generator;
++//import lombok.RequiredArgsConstructor;
++//import org.springframework.http.HttpStatus;
++//import org.springframework.http.ResponseEntity;
++//import org.springframework.web.bind.annotation.PostMapping;
++//import org.springframework.web.bind.annotation.RequestBody;
++//import org.springframework.web.bind.annotation.RequestMapping;
++//import org.springframework.web.bind.annotation.RestController;
++//
++//import java.util.ArrayList;
++//import java.util.List;
++//
++//@RestController
++//@RequiredArgsConstructor
++//@RequestMapping("api")
++//public class AuthController {
++//
++//    private final AuthService authService;
++//    @PostMapping("/register")
++//    public ResponseEntity register(@RequestBody User user){
++//        authService.register(user);
++//        return new ResponseEntity(HttpStatus.OK);
++//    }
++//}
+Index: backend/src/main/java/com/hackathon/dronedelivery/util/filter/JwtFilter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/util/filter/JwtFilter.java b/backend/src/main/java/com/hackathon/dronedelivery/util/filter/JwtFilter.java
+new file mode 100644
+--- /dev/null	(date 1698446615560)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/util/filter/JwtFilter.java	(date 1698446615560)
+@@ -0,0 +1,56 @@
++package com.hackathon.dronedelivery.util.filter;
++
++import com.hackathon.dronedelivery.util.JwtUtil;
++import jakarta.servlet.FilterChain;
++import jakarta.servlet.ServletException;
++import jakarta.servlet.http.HttpServletRequest;
++import jakarta.servlet.http.HttpServletResponse;
++import lombok.RequiredArgsConstructor;
++import org.springframework.http.HttpHeaders;
++import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
++import org.springframework.security.core.context.SecurityContextHolder;
++import org.springframework.security.core.userdetails.UserDetails;
++import org.springframework.security.core.userdetails.UserDetailsService;
++import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
++import org.springframework.stereotype.Component;
++import org.springframework.web.filter.OncePerRequestFilter;
++
++import java.io.IOException;
++
++
++
++@Component
++@RequiredArgsConstructor
++public class JwtFilter extends OncePerRequestFilter {
++    private final JwtUtil jwtUtil;
++    private final UserDetailsService userDetailsService;
++    @Override
++    protected void doFilterInternal(HttpServletRequest request,
++                                    HttpServletResponse response,
++                                    FilterChain filterChain) throws ServletException, IOException {
++        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
++        final String jwt;
++        final String username;
++        if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
++            filterChain.doFilter(request, response);
++            return;
++        }
++        jwt = authHeader.substring(7);
++        username = jwtUtil.extractUsername(jwt);
++        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
++            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
++            if (jwtUtil.isTokenValid(jwt, userDetails)) {
++                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
++                        userDetails,
++                        null,
++                        userDetails.getAuthorities()
++                );
++                authToken.setDetails(
++                        new WebAuthenticationDetailsSource().buildDetails(request)
++                );
++                SecurityContextHolder.getContext().setAuthentication(authToken);
++            }
++        }
++        filterChain.doFilter(request, response);
++    }
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/util/JwtUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/util/JwtUtil.java b/backend/src/main/java/com/hackathon/dronedelivery/util/JwtUtil.java
+new file mode 100644
+--- /dev/null	(date 1698446228251)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/util/JwtUtil.java	(date 1698446228251)
+@@ -0,0 +1,89 @@
++package com.hackathon.dronedelivery.util;
++
++import io.jsonwebtoken.Claims;
++import io.jsonwebtoken.ExpiredJwtException;
++import io.jsonwebtoken.Jwts;
++import io.jsonwebtoken.SignatureAlgorithm;
++import io.jsonwebtoken.impl.DefaultClaims;
++import io.jsonwebtoken.io.Decoders;
++import io.jsonwebtoken.security.Keys;
++import org.springframework.beans.factory.annotation.Value;
++import org.springframework.security.core.GrantedAuthority;
++import org.springframework.security.core.userdetails.UserDetails;
++import org.springframework.stereotype.Component;
++
++import java.io.Serializable;
++import java.security.Key;
++import java.util.Date;
++import java.util.HashMap;
++import java.util.Map;
++import java.util.function.Function;
++import java.util.stream.Collectors;
++
++@Component
++public class JwtUtil implements Serializable {
++    public static final long JWT_TOKEN_VALIDITY = 30 * 24 * 60 * 60;
++    @Value("${jwt.secret}")
++    private String secret;
++
++    public String extractUsername(String token) {
++        return extractClaim(token, Claims::getSubject);
++    }
++    private Claims extractAllClaims(String token) {
++        try {
++            return Jwts
++                    .parserBuilder()
++                    .setSigningKey(getSignInKey())
++                    .build()
++                    .parseClaimsJws(token)
++                    .getBody();
++        } catch (ExpiredJwtException e) {
++            return new DefaultClaims();
++        }
++    }
++
++    private Key getSignInKey() {
++        byte[] bytes = Decoders.BASE64.decode(secret);
++        return Keys.hmacShaKeyFor(bytes);
++    }
++    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
++        final Claims claims = extractAllClaims(token);
++        return claimsResolver.apply(claims);
++    }
++    public String generateToken(UserDetails userDetails) {
++        Map<String, Object> claims = new HashMap<>();
++        claims.put("authorities", userDetails.getAuthorities()
++                .stream()
++                .map(GrantedAuthority::getAuthority)
++                .collect(Collectors.toList()));
++        return generateToken(claims, userDetails);
++    }
++
++    public String generateToken(Map<String, Object> extraClaims,
++                                UserDetails userDetails) {
++        return buildToken(extraClaims, userDetails);
++    }
++    private String buildToken(Map<String, Object> extraClaims,
++                              UserDetails userDetails) {
++        return Jwts
++                .builder()
++                .setClaims(extraClaims)
++                .setSubject(userDetails.getUsername())
++                .setIssuedAt(new Date(System.currentTimeMillis()))
++                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 100))
++                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
++                .compact();
++    }
++    public boolean isTokenValid(String token, UserDetails userDetails) {
++        final String username = extractUsername(token);
++        return (userDetails != null && username.equals(userDetails.getUsername())) && !isTokenExpired(token);
++    }
++
++    private boolean isTokenExpired(String token) {
++        return extractExpiration(token).before(new Date());
++    }
++
++    private Date extractExpiration(String token) {
++        return extractClaim(token, Claims::getExpiration);
++    }
++}
+\ No newline at end of file
+Index: backend/src/main/java/com/hackathon/dronedelivery/util/auth/UserDetailsService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.hackathon.dronedelivery.util.auth;\r\n\r\nimport com.hackathon.dronedelivery.model.User;\r\nimport com.hackathon.dronedelivery.service.UserService;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.security.core.userdetails.UserDetails;\r\nimport org.springframework.security.core.userdetails.UsernameNotFoundException;\r\n\r\n@RequiredArgsConstructor\r\npublic class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {\r\n\r\n    private final UserService userService;\r\n\r\n    @Override\r\n    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {\r\n        User user = userService.getUser(login);\r\n        if (user == null) {\r\n            throw new UsernameNotFoundException(login);\r\n        }\r\n        return new User();\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/util/auth/UserDetailsService.java b/backend/src/main/java/com/hackathon/dronedelivery/util/auth/UserDetailsService.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/util/auth/UserDetailsService.java	(revision 0795e3faa89e683adabb70e7a206371aa60bcbfc)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/util/auth/UserDetailsService.java	(date 1698446895442)
+@@ -1,22 +1,22 @@
+-package com.hackathon.dronedelivery.util.auth;
+-
+-import com.hackathon.dronedelivery.model.User;
+-import com.hackathon.dronedelivery.service.UserService;
+-import lombok.RequiredArgsConstructor;
+-import org.springframework.security.core.userdetails.UserDetails;
+-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+-
+-@RequiredArgsConstructor
+-public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
+-
+-    private final UserService userService;
+-
+-    @Override
+-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+-        User user = userService.getUser(login);
+-        if (user == null) {
+-            throw new UsernameNotFoundException(login);
+-        }
+-        return new User();
+-    }
+-}
+\ No newline at end of file
++//package com.hackathon.dronedelivery.util.auth;
++//
++//import com.hackathon.dronedelivery.model.User;
++//import com.hackathon.dronedelivery.service.UserService;
++//import lombok.RequiredArgsConstructor;
++//import org.springframework.security.core.userdetails.UserDetails;
++//import org.springframework.security.core.userdetails.UsernameNotFoundException;
++//
++//@RequiredArgsConstructor
++//public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
++//
++//    private final UserService userService;
++//
++//    @Override
++//    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
++//        User user = userService.getUser(login);
++//        if (user == null) {
++//            throw new UsernameNotFoundException(login);
++//        }
++//        return new User();
++//    }
++//}
+\ No newline at end of file
+Index: backend/src/main/java/com/hackathon/dronedelivery/auth/RegisterRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/auth/RegisterRequest.java b/backend/src/main/java/com/hackathon/dronedelivery/auth/RegisterRequest.java
+new file mode 100644
+--- /dev/null	(date 1698446615532)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/auth/RegisterRequest.java	(date 1698446615532)
+@@ -0,0 +1,20 @@
++package com.hackathon.dronedelivery.auth;
++
++import com.hackathon.dronedelivery.enums.Role;
++import lombok.AllArgsConstructor;
++import lombok.Builder;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++
++@Data
++@Builder
++@NoArgsConstructor
++@AllArgsConstructor
++public class RegisterRequest {
++    private String name;
++    private String surname;
++    private String username;
++    private String password;
++    private Role role;
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationController.java b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationController.java
+new file mode 100644
+--- /dev/null	(date 1698447304101)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationController.java	(date 1698447304101)
+@@ -0,0 +1,42 @@
++package com.hackathon.dronedelivery.auth;
++
++import com.fasterxml.jackson.core.JsonProcessingException;
++import com.hackathon.dronedelivery.model.User;
++import com.hackathon.dronedelivery.util.JwtUtil;
++import lombok.RequiredArgsConstructor;
++import org.springframework.http.HttpHeaders;
++import org.springframework.http.ResponseEntity;
++import org.springframework.security.core.annotation.AuthenticationPrincipal;
++import org.springframework.validation.BindingResult;
++import org.springframework.web.bind.annotation.*;
++
++
++
++@RestController
++@RequiredArgsConstructor
++@RequestMapping("/api")
++public class AuthenticationController {
++    private final AuthenticationService authenticationService;
++    private final JwtUtil jwtUtil;
++
++    @PostMapping("/register")
++    public ResponseEntity<?> register(@RequestBody RegisterRequest request, BindingResult bindingResult) throws JsonProcessingException {
++        AuthenticationResponse response = authenticationService.register(request, bindingResult);
++        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, String.valueOf(response.getToken())).body(response.getUser());
++    }
++
++    @PostMapping("/authenticate")
++    public ResponseEntity<?> authenticate(
++            @RequestBody AuthenticationRequest request, BindingResult bindingResult) throws JsonProcessingException {
++        AuthenticationResponse response = authenticationService.authenticate(request, bindingResult);
++        return ResponseEntity.ok().header(HttpHeaders.AUTHORIZATION, String.valueOf(response.getToken())).body(response.getUser());
++
++    }
++
++
++    @GetMapping("/validate")
++    public ResponseEntity<?> validationToken (@RequestParam("token") String token, @AuthenticationPrincipal User user) {
++        boolean isValidateToken = jwtUtil.isTokenValid(token, user);
++        return ResponseEntity.ok(isValidateToken);
++    }
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationService.java b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationService.java
+new file mode 100644
+--- /dev/null	(date 1698447244969)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationService.java	(date 1698447244969)
+@@ -0,0 +1,65 @@
++package com.hackathon.dronedelivery.auth;
++
++import com.hackathon.dronedelivery.model.Authority;
++import com.hackathon.dronedelivery.model.User;
++import com.hackathon.dronedelivery.service.UserService;
++import com.hackathon.dronedelivery.util.JwtUtil;
++import lombok.RequiredArgsConstructor;
++import org.springframework.security.authentication.AuthenticationManager;
++import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
++import org.springframework.security.crypto.password.PasswordEncoder;
++import org.springframework.stereotype.Service;
++import org.springframework.validation.BindingResult;
++
++import java.util.List;
++
++
++@Service
++@RequiredArgsConstructor
++public class AuthenticationService {
++
++    private final UserService userService;
++    private final PasswordEncoder passwordEncoder;
++    private final JwtUtil jwtUtil;
++    private final AuthenticationManager authenticationManager;
++
++    public AuthenticationResponse register(RegisterRequest request, BindingResult bindingResult) {
++
++        Authority authority = new Authority(request.getRole());
++        var user = User.builder()
++                .name(request.getName())
++                .surname(request.getSurname())
++                .username(request.getUsername())
++                .password(passwordEncoder.encode(request.getPassword()))
++                .authorities(List.of(authority))
++                .build();
++
++        authority.setUser(user);
++        userService.save(user);
++
++        var jwtToken = jwtUtil.generateToken(user);
++        return AuthenticationResponse.builder()
++                .token(jwtToken)
++                .user(user)
++                .build();
++
++    }
++
++    public AuthenticationResponse authenticate(AuthenticationRequest request, BindingResult bindingResult) {
++        var user = userService.findByUsername(request.getUsername()).get();
++
++
++        authenticationManager.authenticate(
++                new UsernamePasswordAuthenticationToken(
++                        request.getUsername(),
++                        request.getPassword()
++                )
++        );
++        var jwtToken = jwtUtil.generateToken(user);
++        return AuthenticationResponse.builder()
++                .token(jwtToken)
++                .user(user)
++                .build();
++
++    }
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/service/UserService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.hackathon.dronedelivery.service;\r\n\r\nimport com.hackathon.dronedelivery.model.User;\r\nimport com.hackathon.dronedelivery.repository.UserRepository;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.stereotype.Service;\r\nimport org.springframework.transaction.annotation.Transactional;\r\n\r\n@Service\r\n@Transactional\r\n@RequiredArgsConstructor\r\npublic class UserService {\r\n    private final UserRepository userRepository;\r\n\r\n    public User getUser(Long id){\r\n        return userRepository.findById(id).get();\r\n    }\r\n\r\n    public User getUser(String pr){\r\n        return userRepository.findByUsername(pr.replaceAll(\" \", \"\")).get();\r\n    }\r\n\r\n    public void setSettings(String pr, String name, String surname, String imgLink){\r\n        User user = getUser(pr);\r\n        user.setName(name);\r\n        user.setSurname(surname);\r\n        Update(user);\r\n    }\r\n\r\n    public void Update(User user){\r\n        userRepository.save(user);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/service/UserService.java b/backend/src/main/java/com/hackathon/dronedelivery/service/UserService.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/service/UserService.java	(revision 0795e3faa89e683adabb70e7a206371aa60bcbfc)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/service/UserService.java	(date 1698446615520)
+@@ -6,6 +6,8 @@
+ import org.springframework.stereotype.Service;
+ import org.springframework.transaction.annotation.Transactional;
+ 
++import java.util.Optional;
++
+ @Service
+ @Transactional
+ @RequiredArgsConstructor
+@@ -30,4 +32,11 @@
+     public void Update(User user){
+         userRepository.save(user);
+     }
++    public User save(User user) {
++        return userRepository.save(user);
++    }
++
++    public Optional<User> findByUsername(String username) {
++        return userRepository.findByUsername(username);
++    }
+ }
+Index: backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationRequest.java b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationRequest.java
+new file mode 100644
+--- /dev/null	(date 1698446073436)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationRequest.java	(date 1698446073436)
+@@ -0,0 +1,15 @@
++package com.hackathon.dronedelivery.auth;
++
++import lombok.AllArgsConstructor;
++import lombok.Builder;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++@Data
++@Builder
++@NoArgsConstructor
++@AllArgsConstructor
++public class AuthenticationRequest {
++    private String username;
++    private String password;
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationResponse.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationResponse.java b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationResponse.java
+new file mode 100644
+--- /dev/null	(date 1698447244976)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/auth/AuthenticationResponse.java	(date 1698447244976)
+@@ -0,0 +1,17 @@
++package com.hackathon.dronedelivery.auth;
++
++import com.hackathon.dronedelivery.model.User;
++import lombok.AllArgsConstructor;
++import lombok.Builder;
++import lombok.Data;
++import lombok.NoArgsConstructor;
++
++@Data
++@Builder
++@NoArgsConstructor
++@AllArgsConstructor
++public class AuthenticationResponse {
++    private String token;
++    private User user;
++
++}
+Index: backend/src/main/java/com/hackathon/dronedelivery/util/auth/AuthProvider.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.hackathon.dronedelivery.util.auth;\r\n\r\n\r\nimport com.hackathon.dronedelivery.model.User;\r\nimport com.hackathon.dronedelivery.service.UserService;\r\nimport lombok.RequiredArgsConstructor;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.security.authentication.AuthenticationProvider;\r\nimport org.springframework.security.authentication.UsernamePasswordAuthenticationToken;\r\nimport org.springframework.security.core.Authentication;\r\nimport org.springframework.security.core.AuthenticationException;\r\nimport org.springframework.stereotype.Component;\r\n\r\n@Component\r\n@RequiredArgsConstructor\r\npublic class AuthProvider implements AuthenticationProvider {\r\n\r\n    private final UserService userService;\r\n\r\n\r\n    @Override\r\n    public Authentication authenticate(Authentication authentication)\r\n            throws AuthenticationException {\r\n        try{\r\n            String name = authentication.getName();\r\n            String password = authentication.getCredentials().toString();\r\n            User user = userService.getUser(name);\r\n            var grantedAuthority = user.getAuthorities();\r\n            if(grantedAuthority!=null) {\r\n                return new UsernamePasswordAuthenticationToken(\r\n                        name, password, grantedAuthority);\r\n            }\r\n            else{\r\n                return null;\r\n            }\r\n        }\r\n        catch (AuthenticationException e){\r\n            return null;\r\n        }\r\n    }\r\n\r\n\r\n    @Override\r\n    public boolean supports(Class<?> authentication) {\r\n        return authentication.equals(UsernamePasswordAuthenticationToken.class);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/util/auth/AuthProvider.java b/backend/src/main/java/com/hackathon/dronedelivery/util/auth/AuthProvider.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/util/auth/AuthProvider.java	(revision 0795e3faa89e683adabb70e7a206371aa60bcbfc)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/util/auth/AuthProvider.java	(date 1698446895435)
+@@ -1,47 +1,47 @@
+-package com.hackathon.dronedelivery.util.auth;
+-
+-
+-import com.hackathon.dronedelivery.model.User;
+-import com.hackathon.dronedelivery.service.UserService;
+-import lombok.RequiredArgsConstructor;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.security.authentication.AuthenticationProvider;
+-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+-import org.springframework.security.core.Authentication;
+-import org.springframework.security.core.AuthenticationException;
+-import org.springframework.stereotype.Component;
+-
+-@Component
+-@RequiredArgsConstructor
+-public class AuthProvider implements AuthenticationProvider {
+-
+-    private final UserService userService;
+-
+-
+-    @Override
+-    public Authentication authenticate(Authentication authentication)
+-            throws AuthenticationException {
+-        try{
+-            String name = authentication.getName();
+-            String password = authentication.getCredentials().toString();
+-            User user = userService.getUser(name);
+-            var grantedAuthority = user.getAuthorities();
+-            if(grantedAuthority!=null) {
+-                return new UsernamePasswordAuthenticationToken(
+-                        name, password, grantedAuthority);
+-            }
+-            else{
+-                return null;
+-            }
+-        }
+-        catch (AuthenticationException e){
+-            return null;
+-        }
+-    }
+-
+-
+-    @Override
+-    public boolean supports(Class<?> authentication) {
+-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
+-    }
+-}
+\ No newline at end of file
++//package com.hackathon.dronedelivery.util.auth;
++//
++//
++//import com.hackathon.dronedelivery.model.User;
++//import com.hackathon.dronedelivery.service.UserService;
++//import lombok.RequiredArgsConstructor;
++//import org.springframework.beans.factory.annotation.Autowired;
++//import org.springframework.security.authentication.AuthenticationProvider;
++//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
++//import org.springframework.security.core.Authentication;
++//import org.springframework.security.core.AuthenticationException;
++//import org.springframework.stereotype.Component;
++//
++//@Component
++//@RequiredArgsConstructor
++//public class AuthProvider implements AuthenticationProvider {
++//
++//    private final UserService userService;
++//
++//
++//    @Override
++//    public Authentication authenticate(Authentication authentication)
++//            throws AuthenticationException {
++//        try{
++//            String name = authentication.getName();
++//            String password = authentication.getCredentials().toString();
++//            User user = userService.getUser(name);
++//            var grantedAuthority = user.getAuthorities();
++//            if(grantedAuthority!=null) {
++//                return new UsernamePasswordAuthenticationToken(
++//                        name, password, grantedAuthority);
++//            }
++//            else{
++//                return null;
++//            }
++//        }
++//        catch (AuthenticationException e){
++//            return null;
++//        }
++//    }
++//
++//
++//    @Override
++//    public boolean supports(Class<?> authentication) {
++//        return authentication.equals(UsernamePasswordAuthenticationToken.class);
++//    }
++//}
+\ No newline at end of file
+Index: backend/src/main/java/com/hackathon/dronedelivery/config/SecurityConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.hackathon.dronedelivery.config;\r\n\r\nimport com.hackathon.dronedelivery.enums.Role;\r\nimport com.hackathon.dronedelivery.service.UserService;\r\nimport com.hackathon.dronedelivery.util.auth.UserDetailsService;\r\nimport com.hackathon.dronedelivery.util.auth.AuthProvider;\r\nimport jakarta.servlet.http.HttpServletResponse;\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.beans.factory.annotation.Value;\r\nimport org.springframework.context.annotation.Bean;\r\nimport org.springframework.context.annotation.Configuration;\r\nimport org.springframework.http.HttpStatus;\r\nimport org.springframework.security.authentication.AuthenticationManager;\r\nimport org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;\r\nimport org.springframework.security.config.annotation.web.builders.HttpSecurity;\r\nimport org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;\r\nimport org.springframework.security.web.SecurityFilterChain;\r\nimport org.springframework.security.web.authentication.HttpStatusEntryPoint;\r\nimport org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;\r\nimport org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;\r\nimport org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;\r\nimport org.springframework.web.cors.CorsConfiguration;\r\nimport org.springframework.web.cors.CorsConfigurationSource;\r\nimport org.springframework.web.cors.UrlBasedCorsConfigurationSource;\r\nimport org.springframework.web.servlet.config.annotation.EnableWebMvc;\r\nimport org.springframework.web.servlet.config.annotation.WebMvcConfigurer;\r\n\r\nimport javax.sql.DataSource;\r\nimport java.util.Arrays;\r\n\r\n@Configuration\r\n@EnableWebSecurity\r\n@EnableWebMvc\r\npublic class SecurityConfig implements WebMvcConfigurer{\r\n\r\n    private final AuthProvider authProvider;\r\n    private final String frontendUrl;\r\n    private final String rememberMeKey;\r\n    private final DataSource dataSource;\r\n    private final UserService userService;\r\n\r\n    public SecurityConfig(@Value(\"${backend.rememberMeKey}\") String rememberMeKey, @Value(\"${frontend.url}\") String frontendUrl, @Autowired DataSource dataSource, @Autowired AuthProvider authProvider, UserService userService){\r\n        this.dataSource = dataSource;\r\n        this.authProvider = authProvider;\r\n        this.frontendUrl =frontendUrl;\r\n        this.rememberMeKey = rememberMeKey;\r\n        this.userService = userService;\r\n    }\r\n\r\n    @Bean\r\n    org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){\r\n        return new UserDetailsService(userService);\r\n    }\r\n\r\n    @Bean\r\n    public AuthenticationManager authManager(HttpSecurity http) throws Exception {\r\n        AuthenticationManagerBuilder authenticationManagerBuilder =\r\n                http.getSharedObject(AuthenticationManagerBuilder.class);\r\n        authenticationManagerBuilder.authenticationProvider(authProvider);\r\n        return authenticationManagerBuilder.build();\r\n    }\r\n\r\n    @Bean\r\n    CorsConfigurationSource corsConfigurationSource() {\r\n        UrlBasedCorsConfigurationSource source = new\r\n                UrlBasedCorsConfigurationSource();\r\n        var configuration = new CorsConfiguration();\r\n        configuration.setAllowCredentials(true);\r\n        configuration.addAllowedOrigin(frontendUrl);\r\n        configuration.addAllowedHeader(\"Access-Control-Request-Headers\");\r\n        configuration.addAllowedHeader(\"Content-Type\");\r\n        configuration.addAllowedHeader(\"Access-Control-Request-Method\");\r\n        configuration.setAllowedMethods(Arrays.asList( \"GET\", \"POST\", \"PATCH\", \"PUT\", \"DELETE\", \"OPTIONS\"));\r\n        source.registerCorsConfiguration(\"/**\", configuration);\r\n        return source;\r\n    }\r\n\r\n    @Bean\r\n    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {\r\n        http.csrf().disable();\r\n        http.cors().and()\r\n                .authenticationManager(authManager(http))\r\n                .authorizeHttpRequests()\r\n                .requestMatchers(\"/api/register\", \"/login\").permitAll()\r\n                .requestMatchers(\"/api/*\").hasAuthority(Role.DRONES_SENDER.name())\r\n                .anyRequest()\r\n                .authenticated()\r\n                .and()\r\n                .exceptionHandling()\r\n                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))\r\n                .and()\r\n                .formLogin().passwordParameter(\"password\").usernameParameter(\"username\")\r\n                .successHandler((request, response, authentication) -> {\r\n                    response.setStatus(HttpServletResponse.SC_OK);\r\n                }).failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))\r\n                .permitAll()\r\n                .and()\r\n                .logout()\r\n                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))\r\n                .deleteCookies(\"JSESSIONID\", \"remember-me\")\r\n                .and()\r\n                .rememberMe()\r\n                .tokenRepository(persistentTokenRepository()).userDetailsService(userDetailsService())\r\n                .alwaysRemember(true)\r\n                .tokenValiditySeconds(24*60*60*14)\r\n                .key(rememberMeKey);\r\n        return http.build();\r\n    }\r\n\r\n    @Bean\r\n    public PersistentTokenRepository persistentTokenRepository(){\r\n        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();\r\n        tokenRepository.setDataSource(dataSource);\r\n        return tokenRepository;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/backend/src/main/java/com/hackathon/dronedelivery/config/SecurityConfig.java b/backend/src/main/java/com/hackathon/dronedelivery/config/SecurityConfig.java
+--- a/backend/src/main/java/com/hackathon/dronedelivery/config/SecurityConfig.java	(revision 0795e3faa89e683adabb70e7a206371aa60bcbfc)
++++ b/backend/src/main/java/com/hackathon/dronedelivery/config/SecurityConfig.java	(date 1698446838111)
+@@ -1,116 +1,39 @@
+ package com.hackathon.dronedelivery.config;
+ 
+-import com.hackathon.dronedelivery.enums.Role;
+-import com.hackathon.dronedelivery.service.UserService;
+-import com.hackathon.dronedelivery.util.auth.UserDetailsService;
+-import com.hackathon.dronedelivery.util.auth.AuthProvider;
+-import jakarta.servlet.http.HttpServletResponse;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.beans.factory.annotation.Value;
++import com.hackathon.dronedelivery.util.filter.JwtFilter;
++import lombok.RequiredArgsConstructor;
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Configuration;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.security.authentication.AuthenticationManager;
+-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
++import org.springframework.security.authentication.AuthenticationProvider;
+ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+ import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
++import org.springframework.security.config.http.SessionCreationPolicy;
+ import org.springframework.security.web.SecurityFilterChain;
+-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+-import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+-import org.springframework.web.cors.CorsConfiguration;
+-import org.springframework.web.cors.CorsConfigurationSource;
+-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+-
+-import javax.sql.DataSource;
+-import java.util.Arrays;
++import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+ 
+ @Configuration
+ @EnableWebSecurity
+-@EnableWebMvc
+-public class SecurityConfig implements WebMvcConfigurer{
+-
+-    private final AuthProvider authProvider;
+-    private final String frontendUrl;
+-    private final String rememberMeKey;
+-    private final DataSource dataSource;
+-    private final UserService userService;
+-
+-    public SecurityConfig(@Value("${backend.rememberMeKey}") String rememberMeKey, @Value("${frontend.url}") String frontendUrl, @Autowired DataSource dataSource, @Autowired AuthProvider authProvider, UserService userService){
+-        this.dataSource = dataSource;
+-        this.authProvider = authProvider;
+-        this.frontendUrl =frontendUrl;
+-        this.rememberMeKey = rememberMeKey;
+-        this.userService = userService;
+-    }
+-
+-    @Bean
+-    org.springframework.security.core.userdetails.UserDetailsService userDetailsService(){
+-        return new UserDetailsService(userService);
+-    }
+-
+-    @Bean
+-    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+-        AuthenticationManagerBuilder authenticationManagerBuilder =
+-                http.getSharedObject(AuthenticationManagerBuilder.class);
+-        authenticationManagerBuilder.authenticationProvider(authProvider);
+-        return authenticationManagerBuilder.build();
+-    }
+-
+-    @Bean
+-    CorsConfigurationSource corsConfigurationSource() {
+-        UrlBasedCorsConfigurationSource source = new
+-                UrlBasedCorsConfigurationSource();
+-        var configuration = new CorsConfiguration();
+-        configuration.setAllowCredentials(true);
+-        configuration.addAllowedOrigin(frontendUrl);
+-        configuration.addAllowedHeader("Access-Control-Request-Headers");
+-        configuration.addAllowedHeader("Content-Type");
+-        configuration.addAllowedHeader("Access-Control-Request-Method");
+-        configuration.setAllowedMethods(Arrays.asList( "GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"));
+-        source.registerCorsConfiguration("/**", configuration);
+-        return source;
+-    }
++@RequiredArgsConstructor
++public class SecurityConfig {
++    private final JwtFilter jwtFilter;
++    private final AuthenticationProvider authenticationProvider;
+ 
+     @Bean
+-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+-        http.csrf().disable();
+-        http.cors().and()
+-                .authenticationManager(authManager(http))
++    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
++        httpSecurity
++                .csrf().disable()
++                .cors().disable()
+                 .authorizeHttpRequests()
+-                .requestMatchers("/api/register", "/login").permitAll()
+-                .requestMatchers("/api/*").hasAuthority(Role.DRONES_SENDER.name())
++                .requestMatchers("/api/**")
++                .permitAll()
+                 .anyRequest()
+                 .authenticated()
+                 .and()
+-                .exceptionHandling()
+-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+-                .and()
+-                .formLogin().passwordParameter("password").usernameParameter("username")
+-                .successHandler((request, response, authentication) -> {
+-                    response.setStatus(HttpServletResponse.SC_OK);
+-                }).failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED))
+-                .permitAll()
+-                .and()
+-                .logout()
+-                .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
+-                .deleteCookies("JSESSIONID", "remember-me")
++                .sessionManagement()
++                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                 .and()
+-                .rememberMe()
+-                .tokenRepository(persistentTokenRepository()).userDetailsService(userDetailsService())
+-                .alwaysRemember(true)
+-                .tokenValiditySeconds(24*60*60*14)
+-                .key(rememberMeKey);
+-        return http.build();
++                .authenticationProvider(authenticationProvider)
++                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
++        return httpSecurity.build();
+     }
+-
+-    @Bean
+-    public PersistentTokenRepository persistentTokenRepository(){
+-        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+-        tokenRepository.setDataSource(dataSource);
+-        return tokenRepository;
+-    }
+-}
+\ No newline at end of file
++}
