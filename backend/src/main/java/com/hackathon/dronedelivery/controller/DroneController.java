@@ -38,4 +38,11 @@ public class DroneController {
         droneService.sendDrone(drone);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PatchMapping("/drones/{id}")
+    public ResponseEntity<Drone> updateDrone (@RequestBody Drone drone) {
+        Drone updatedDrone = droneService.save(drone);
+        return ResponseEntity.ok(updatedDrone);
+    }
+
 }
