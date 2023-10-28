@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.model;
 
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayDeque;
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 @Component
 public class DronePool {
+    @Getter
     Deque<Drone> dronePool = new ArrayDeque<Drone>();
     DronePool instance = null;
     private DronePool(){
@@ -33,5 +35,6 @@ public class DronePool {
     public Drone peek(){
         return dronePool.peek();
     }
+
 
 }
