@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 public class RequestToMarketplace {
-    public static void updateStatus(Order order) {
+    public static void updateOrder(Order order) {
         RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://marketplace.com/api/order";
