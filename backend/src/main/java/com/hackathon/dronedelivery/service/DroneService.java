@@ -24,8 +24,9 @@ public class DroneService {
         return droneRepository.findAll();
     }
 
-    public void save(Drone drone){
-        droneRepository.save(drone);
+    public Drone save(Drone drone){
+
+        return droneRepository.save(drone);
     }
 
     public Optional<Drone> findById(Long id) {

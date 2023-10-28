@@ -29,9 +29,11 @@ public class Drone {
     private double maxWeight;
 
     private double currentLongitude;
+
     private double currentLatitude;
 
     private String imageLink;
+
     @Enumerated(EnumType.STRING)
     private DroneStatus status = DroneStatus.READY_FOR_DELIVERY;
     public boolean isChargeEnoughToDeliver(double distance){
