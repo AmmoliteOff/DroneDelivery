@@ -13,56 +13,70 @@ import { ProfilePage } from "pages/profile";
 import { Header } from "widgets/header";
 import { isAuthSelector } from "entities/user";
 
-interface GuardProps {
-    children: React.ReactNode;
-}
-const Guard = ({ children }: GuardProps) => {
-    const isAuthorized = useAppSelector(isAuthSelector);
+// interface GuardProps {
+//     children: React.ReactNode;
+// }
+// const Guard = ({ children }: GuardProps) => {
+//     const isAuthorized = useAppSelector(isAuthSelector);
 
-    if (!isAuthorized) {
-        return <Navigate to="/login" />;
-    }
-    return children;
-};
+//     if (!isAuthorized) {
+//         return <Navigate to="/login" />;
+//     }
+//     return children;
+// };
 
 export const Routing = () => {
     return (
         <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route element={<Layout header={<Header />} />}>
-                <Route
-                    path="/home"
-                    element={
-                        <Guard>
-                            <HomePage />
-                        </Guard>
-                    }
-                />
-                <Route
-                    path="/drones"
-                    element={
-                        <Guard>
-                            <DronesPage />
-                        </Guard>
-                    }
-                />
-                <Route
-                    path="/drones/:droneId"
-                    element={
-                        <Guard>
-                            <DronePage />
-                        </Guard>
-                    }
-                />
-                <Route
-                    path="/profile"
-                    element={
-                        <Guard>
-                            <ProfilePage />
-                        </Guard>
-                    }
-                />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/drones" element={<DronesPage />} />
+                <Route path="/drones/:droneId" element={<DronePage />} />
+                <Route path="/profile" element={<ProfilePage />} />
             </Route>
         </Routes>
     );
 };
+
+// export const Routing = () => {
+//     return (
+//         <Routes>
+//             <Route path="/login" element={<LoginPage />} />
+//             <Route element={<Layout header={<Header />} />}>
+//                 <Route
+//                     path="/home"
+//                     element={
+//                         <Guard>
+//                             <HomePage />
+//                         </Guard>
+//                     }
+//                 />
+//                 <Route
+//                     path="/drones"
+//                     element={
+//                         <Guard>
+//                             <DronesPage />
+//                         </Guard>
+//                     }
+//                 />
+//                 <Route
+//                     path="/drones/:droneId"
+//                     element={
+//                         <Guard>
+//                             <DronePage />
+//                         </Guard>
+//                     }
+//                 />
+//                 <Route
+//                     path="/profile"
+//                     element={
+//                         <Guard>
+//                             <ProfilePage />
+//                         </Guard>
+//                     }
+//                 />
+//             </Route>
+//         </Routes>
+//     );
+// };

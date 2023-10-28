@@ -39,7 +39,10 @@ export const ReqMax: React.FC<OrderMaxProps> = ({ req, renderDrone }) => {
         <div className={css.orderMax}>
             <div className={css.orderInfo}>
                 <YandexMap
-                    defaultGeometry={[req.drone.latitude, req.drone.longitude]}
+                    defaultGeometry={[
+                        req.drone.currentLatitude,
+                        req.drone.currentLongitude,
+                    ]}
                     allGeometry={addedProducts.map((added) => [
                         added.latitude,
                         added.longitude,
@@ -58,19 +61,16 @@ export const ReqMax: React.FC<OrderMaxProps> = ({ req, renderDrone }) => {
                 </div>
             </div>
 
-            {req.orders.map((order) => {
+            {req.drone.orders.map((order) => {
                 return (
                     <div key={order.id} className={css.productInfo}>
                         <div className={css.customer}>
                             <div className={css.customerInfo}>
                                 <h3 className={css.name}>
-                                    {order.customer.name}
+                                    {order.customerName}
                                 </h3>
-                                <p>Адрес доставки: {order.deliveryAdress}</p>
-                                <p>
-                                    Номер телефона:{" "}
-                                    {order.customer.telephoneNumber}
-                                </p>
+                                <p>Адрес доставки: {order.customerAddress}</p>
+                                <p>Номер телефона: {order.customerNumber}</p>
                             </div>
                             {/* <Button className={css.removeButton}>
                                 Отменить эту часть заказа

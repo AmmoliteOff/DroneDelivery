@@ -11,7 +11,9 @@ import { Button } from "shared/ui";
 export const DronePage = () => {
     const { droneId } = useParams();
 
-    const drone = useAppSelector((state) => droneByIdSelector(state, droneId));
+    const drone = useAppSelector((state) =>
+        droneByIdSelector(state, droneId ? +droneId : undefined)
+    );
 
     if (!drone) return <h1>Дрон не найден</h1>;
 

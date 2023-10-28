@@ -1,84 +1,75 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { type OrderModel, type Requisition } from "./types";
-import { getRequisitionssAsync } from "./asyncThunks";
+import { type OrderModel } from "./types";
+import { getRequisitionsAsync } from "./asyncThunks";
 
-const REQS: Requisition[] = [
-    {
-        id: "864",
-        orders: [
-            {
-                deliveryAdress: "Кольцовская д. 1",
-                latitude: 55.72,
-                longitude: 37.44,
-                id: "951",
-                customer: {
-                    name: "Ваня",
-                    surname: "Иванов",
-                    telephoneNumber: "8594595943",
-                },
-                products: [
-                    { id: "1", img: "banana.png", name: "Бананы", weight: 2 },
-                    { id: "2", img: "banana.png", name: "Бананы", weight: 2 },
-                ],
-            },
-            {
-                deliveryAdress: "Кольцовская д. 1",
-                latitude: 55.8,
-                longitude: 37.4,
-                id: "32",
-                customer: {
-                    name: "Ваня",
-                    surname: "Иванов",
-                    telephoneNumber: "8594595943",
-                },
-                products: [
-                    { id: "3", img: "banana.png", name: "Бананы", weight: 2 },
-                    { id: "4", img: "banana.png", name: "Бананы", weight: 2 },
-                ],
-            },
-        ],
-        drone: {
-            id: "12",
-            img: "drone.png",
-            maxWeight: 10,
-            charging: 90,
-            latitude: 55.76,
-            longitude: 37.64,
-        },
-    },
-    {
-        id: "432",
-        orders: [
-            {
-                id: "35",
-                latitude: 55.72,
-                longitude: 37.44,
-                deliveryAdress: "Университетская д. 5",
-                customer: {
-                    name: "Сергей",
-                    surname: "Сергеев",
-                    telephoneNumber: "88005553535",
-                },
-                products: [
-                    { id: "5", img: "banana.png", name: "Бананы", weight: 2 },
-                    { id: "6", img: "banana.png", name: "Бананы", weight: 2 },
-                ],
-            },
-        ],
-        drone: {
-            id: "321",
-            img: "drone.png",
-            maxWeight: 4,
-            charging: 70,
-            latitude: 55.76,
-            longitude: 37.64,
-        },
-    },
-];
+// const REQS: Requisition[] = [
+//     {
+//         id: 1,
+//         drone: {
+//             id: 1,
+//             orders: [
+//                 {
+//                     id: 1,
+//                     customerAddress: "45 стрелковой дивизии 259/7",
+//                     customerName: "Егор",
+//                     customerNumber: "89601082785",
+//                     products: [
+//                         {
+//                             id: 1,
+//                             weight: 3,
+//                             name: "Яблоко",
+//                             img: "https://res.cloudinary.com/do1tmxguz/image/upload/v1698485259/onpeb7suvzrpbrzh9edx.png",
+//                         },
+//                     ],
+//                     longitude: 39.20667,
+//                     latitude: 51.66646,
+//                 },
+//             ],
+//             charge: 100,
+//             maxWeight: 9,
+//             currentLongitude: 39.20567,
+//             currentLatitude: 51.65646,
+//             imageLink:
+//                 "https://yns1.ru/attachments/Image/dji-mavic-air.png?template=generic",
+//         },
+//         status: "CREATED",
+//     },
+//     {
+//         id: 2,
+//         drone: {
+//             id: 2,
+//             orders: [
+//                 {
+//                     id: 1,
+//                     customerAddress: "45 стрелковой дивизии 259/7",
+//                     customerName: "Егор",
+//                     customerNumber: "89601082785",
+//                     products: [
+//                         {
+//                             id: 1,
+//                             weight: 3,
+//                             name: "Яблоко",
+//                             img: "https://res.cloudinary.com/do1tmxguz/image/upload/v1698485259/onpeb7suvzrpbrzh9edx.png",
+//                         },
+//                     ],
+//                     longitude: 55.72,
+//                     latitude: 37.44,
+//                 },
+//             ],
+//             charge: 100,
+//             maxWeight: 5,
+//             currentLongitude: 39.20567,
+//             currentLatitude: 51.65646,
+//             imageLink:
+//                 "https://yns1.ru/attachments/Image/dji-mavic-air.png?template=generic",
+//         },
+//         status: "CREATED",
+//     },
+// ];
 
 const initialState: OrderModel = {
-    requisitions: REQS,
+    requisitions: undefined,
     isLoading: false,
 };
 
@@ -88,14 +79,14 @@ export const reqModel = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getRequisitionssAsync.pending, (state) => {
+            .addCase(getRequisitionsAsync.pending, (state) => {
                 state.isLoading = true;
             })
-            .addCase(getRequisitionssAsync.fulfilled, (state, { payload }) => {
+            .addCase(getRequisitionsAsync.fulfilled, (state, { payload }) => {
                 state.isLoading = false;
                 state.requisitions = payload;
             })
-            .addCase(getRequisitionssAsync.rejected, (state) => {
+            .addCase(getRequisitionsAsync.rejected, (state) => {
                 state.isLoading = false;
                 // error
             });

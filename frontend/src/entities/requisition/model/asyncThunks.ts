@@ -3,8 +3,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { getRequisitions } from "../api/requests";
 
-export const getRequisitionssAsync = createAsyncThunk(
-    "user/login",
+export const getRequisitionsAsync = createAsyncThunk(
+    "req/getRequisitionsAsync",
     async (_, { rejectWithValue }) => {
         try {
             const data = await getRequisitions();

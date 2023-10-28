@@ -1,11 +1,18 @@
-export interface IDrone {
-    id: string;
-    img?: string;
-    maxWeight: number;
-    charging: number;
+import { type Order } from "../../requisition/model/types";
 
-    latitude: number;
-    longitude: number;
+export interface IDrone {
+    id: number;
+    img?: string;
+
+    orders: Order[];
+
+    imageLink: string;
+
+    charge: number;
+    maxWeight: number;
+
+    currentLatitude: number;
+    currentLongitude: number;
 }
 
 export interface DroneModel {

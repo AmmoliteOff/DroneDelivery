@@ -34,13 +34,17 @@ export const Drone: React.FC<DroneProps> = ({ drone, onClick, weight }) => {
 
     return (
         <div onClick={onClick} className={clazz}>
-            <Image src={drone.img} variant="big" className={css.droneImg} />
+            <Image
+                src="https://res.cloudinary.com/do1tmxguz/image/upload/v1698407549/vkcgft6haenthmvmxxv2.png"
+                variant="big"
+                className={css.droneImg}
+            />
             <div className={css.droneInfo}>
                 <p className={css.title}>Дрон #{drone.id}</p>
                 <div className={css.droneInfo}>
                     <div className={css.droneChargingBlock}>
-                        <DroneCharhingIndicator charging={drone.charging} />
-                        <p>{drone.charging}%</p>
+                        <DroneCharhingIndicator charging={drone.charge} />
+                        <p>{drone.charge}%</p>
                     </div>
                     <div className={css.droneWeightBlock}>
                         <Image

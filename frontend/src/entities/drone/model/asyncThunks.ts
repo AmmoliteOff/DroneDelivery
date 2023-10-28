@@ -4,7 +4,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getDrones } from "../api/requests";
 
 export const getDronesAsync = createAsyncThunk(
-    "user/login",
+    "drone/getDronesAsync",
     async (_, { rejectWithValue }) => {
         try {
             const data = await getDrones();

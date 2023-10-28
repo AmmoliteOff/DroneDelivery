@@ -1,7 +1,7 @@
 import { IDrone } from "entities/drone/@x/order";
 
 export interface Product {
-    id: string;
+    id: number;
     img: string;
     name: string;
     weight: number;
@@ -14,10 +14,14 @@ export interface Customer {
 }
 
 export interface Order {
-    id: string;
-    customer: Customer;
+    id: number;
+
+    customerAddress: string;
+    customerName: string;
+    customerNumber: string;
+
     products: Product[];
-    deliveryAdress: string;
+
     latitude: number;
     longitude: number;
 }
@@ -26,14 +30,13 @@ export type ReqStatus = "CREATED" | "ACCEPTED" | "REJECTED";
 
 // -------------------------->
 export interface Requisition {
-    status: ReqStatus;
-    id: string;
+    id: number;
     drone: IDrone;
-    orders: Order[];
+    status: ReqStatus;
 }
 // <-------------------------
 
 export interface OrderModel {
-    requisitions: Requisition[];
+    requisitions: Requisition[] | undefined;
     isLoading: boolean;
 }
