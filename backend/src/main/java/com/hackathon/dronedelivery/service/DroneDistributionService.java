@@ -1,17 +1,16 @@
 package com.hackathon.dronedelivery.service;
 
 import com.hackathon.dronedelivery.enums.DroneStatus;
+import com.hackathon.dronedelivery.enums.OrderStatus;
 import com.hackathon.dronedelivery.enums.RequestStatus;
 import com.hackathon.dronedelivery.model.*;
+import com.hackathon.dronedelivery.util.RequestToMarketplace;
 import com.hackathon.dronedelivery.util.WeightTree;
 import com.hackathon.dronedelivery.util.geocoding.Geocoding;
 import lombok.AllArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.*;
 import java.util.*;
 
@@ -41,13 +40,15 @@ public class DroneDistributionService {
         for (Order value : orders) {
             Order order = orderService.findById(value.getId()).get();
             order.setDrone(persistDrone);
+            order.setOrderStatus(OrderStatus.ASSEMBLES);
             persistOrders.add(order);
+            RequestToMarketplace.updateOrder(order);
         }
         persistDrone.setOrders(persistOrders);
-        var request = new DroneSendRequest();
+        var request = new Request();
         persistDrone.setStatus(DroneStatus.APPOINTED);
         request.setDrone(persistDrone);
-        request.setStatus(RequestStatus.RECEIVED);
+        request.setStatus(RequestStatus.CREATED);
         requestService.save(request);
     }
 
@@ -71,6 +72,7 @@ public class DroneDistributionService {
             }
             else {
                 orderPool.remove(ordersToDeliver);
+
                 match(drone, ordersToDeliver);
                  //MATCH DONE
             }

@@ -24,7 +24,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/register")
+                .requestMatchers("/api/register", "/api/acceptOrder")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
