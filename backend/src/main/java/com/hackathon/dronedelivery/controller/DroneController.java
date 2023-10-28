@@ -1,5 +1,6 @@
 package com.hackathon.dronedelivery.controller;
 
+import com.hackathon.dronedelivery.dto.DroneDTO;
 import com.hackathon.dronedelivery.model.Drone;
 
 import com.hackathon.dronedelivery.service.DroneDistributionService;
@@ -45,4 +46,13 @@ public class DroneController {
         return ResponseEntity.ok(updatedDrone);
     }
 
+    @PostMapping("/drones/new")
+    public ResponseEntity<Drone> addDrone(@RequestBody DroneDTO droneDTO) {
+        Drone drone = Drone.builder()
+                .charge(droneDTO.getCharge())
+                .maxWeight(droneDTO.getMaxWeight())
+                .fullChargeDistance(droneDTO.getFullChargeDistance())
+                .build();
+        return ResponseEntity.ok(droneService.save(drone));
+    }
 }
