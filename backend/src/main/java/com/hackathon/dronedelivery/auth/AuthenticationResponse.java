@@ -1,4 +1,4 @@
-package com.hackathon.dronedelivery.config.auth;
+package com.hackathon.dronedelivery.auth;
 
 import com.hackathon.dronedelivery.dto.UserDTO;
 import com.hackathon.dronedelivery.model.Authority;

@@ -1,4 +1,4 @@
-package com.hackathon.dronedelivery.config.auth;
+package com.hackathon.dronedelivery.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
