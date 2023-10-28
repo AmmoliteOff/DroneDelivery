@@ -1,10 +1,10 @@
 package com.hackathon.dronedelivery.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 public class GeoCoords {
     private double longitude;
     private double latitude;
@@ -19,7 +19,4 @@ public class GeoCoords {
         this.longitude = longitude;
     }
 
-    public GeoCoords(){
-
-    }
 }

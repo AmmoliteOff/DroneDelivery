@@ -44,7 +44,7 @@ public class DroneService {
     private void sendRequest(String endpoint, Object object){
         try {
 // Создание объекта URL
-            URL url = new URL("http://127.0.0.1:13000/drone/"+endpoint);
+            URL url = new URL("http://127.0.0.1:8080/drone/"+endpoint);
 
 // Открытие соединения
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
