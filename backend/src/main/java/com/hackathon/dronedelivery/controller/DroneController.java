@@ -32,4 +32,10 @@ public class DroneController {
         droneDistributionService.addDrone(drone);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping("/sendDrone")
+    public ResponseEntity<?> sendDrone(@RequestBody Drone drone){
+        droneService.sendDrone(drone);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

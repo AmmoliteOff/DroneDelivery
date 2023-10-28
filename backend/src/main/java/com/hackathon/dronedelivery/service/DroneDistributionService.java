@@ -34,11 +34,13 @@ public class DroneDistributionService {
         produceMatch();
     }
 
-    private void match(Drone drone, List<Order> orders) {
+    private void match(Drone drone, Map<GeoCoords, Order> orders) {
         Drone persistDrone = droneService.findById(drone.getId()).get();
+        Map<GeoCoords, Long> routeMap = new HashMap<>();
         List<Order> persistOrders = new ArrayList<>();
-        for (Order value : orders) {
-            Order order = orderService.findById(value.getId()).get();
+        for (GeoCoords key : orders.keySet()) {
+            Order order = orderService.findById(orders.get(key).getId()).get();
+            routeMap.put(key, order.getId());
             order.setDrone(persistDrone);
             order.setOrderStatus(OrderStatus.ASSEMBLES);
             persistOrders.add(order);
@@ -49,6 +51,7 @@ public class DroneDistributionService {
         persistDrone.setStatus(DroneStatus.APPOINTED);
         request.setDrone(persistDrone);
         request.setStatus(RequestStatus.CREATED);
+        droneService.setRoute(routeMap);
         requestService.save(request);
     }
 
@@ -62,18 +65,24 @@ public class DroneDistributionService {
             }
 
             var ordersToDeliver = tree.getLeft();
-            ordersToDeliver = removeOrdersBasedOnDistance(drone,
+            var ordersToDeliverMap = removeOrdersBasedOnDistance(drone,
                     ordersToDeliver, new GeoCoords(drone.getCurrentLongitude(),
                             drone.getCurrentLatitude()));
 
-            if(ordersToDeliver.isEmpty()){
+            if(ordersToDeliverMap.isEmpty()){
                 produceMatch();
                 dronePool.add(drone);
             }
             else {
-                orderPool.remove(ordersToDeliver);
+                var list = new ArrayList<Order>();
+                for (GeoCoords key:
+                     ordersToDeliverMap.keySet()) {
+                    list.add(ordersToDeliverMap.get(key));
+                }
 
-                match(drone, ordersToDeliver);
+                orderPool.remove(list);
+
+                match(drone, ordersToDeliverMap);
                  //MATCH DONE
             }
             return true;
@@ -82,7 +91,7 @@ public class DroneDistributionService {
             return false;
     }
 
-    private List<Order> removeOrdersBasedOnDistance(Drone drone, List<Order> orders, GeoCoords startPoint) throws IOException, URISyntaxException {
+    private Map<GeoCoords, Order> removeOrdersBasedOnDistance(Drone drone, List<Order> orders, GeoCoords startPoint) throws IOException, URISyntaxException {
         List<GeoCoords> coords = new ArrayList<>();
         List<Order> result = new ArrayList<>(orders);
         Map<GeoCoords, Order> ordersMap = new HashMap<>();
@@ -94,11 +103,11 @@ public class DroneDistributionService {
 
         coords = Geocoding.getShortestWay(startPoint, coords);
 
-        while(coords.size()-1 >= 0 && !(drone.isChargeEnoughToDeliver(Geocoding.getCoordsSum(coords))) || !coords.isEmpty()){
+        while(coords.size()-1 >= 0 && !(drone.isChargeEnoughToDeliver(Geocoding.getCoordsSum(coords))) && !coords.isEmpty()){
+            ordersMap.remove(coords.get(coords.size()-1));
             coords.remove(coords.size()-1);
-            result.remove(ordersMap.get(coords));
         }
 
-        return result;
+        return ordersMap;
     }
 }
