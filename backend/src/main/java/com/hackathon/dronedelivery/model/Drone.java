@@ -28,11 +28,11 @@ public class Drone {
 
     private double maxWeight;
 
-    private double currentLongitude;
+    private double currentLongitude = 39.20567;
 
-    private double currentLatitude;
+    private double currentLatitude = 51.65646;
 
-    private String imageLink;
+    private String imageLink = "https://yns1.ru/attachments/Image/dji-mavic-air.png?template=generic";
 
     @Enumerated(EnumType.STRING)
     private DroneStatus status = DroneStatus.READY_FOR_DELIVERY;

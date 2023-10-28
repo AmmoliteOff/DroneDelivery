@@ -24,7 +24,7 @@ public class Order {
     private String customerNumber;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderStatus orderStatus = OrderStatus.SENT_FOR_ASSEMBLY;
 
     private Double weight;
 
