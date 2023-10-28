@@ -1,6 +1,6 @@
 package com.hackathon.dronedelivery.model;
 
-import com.hackathon.dronedelivery.enums.Role;
+import com.hackathon.dronedelivery.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,16 +17,16 @@ public class Authority implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private UserRole userRole;
     @ManyToOne(optional = false)
     private User user;
 
     @Override
     public String getAuthority() {
-        return role.name();
+        return userRole.name();
     }
 
-    public Authority(Role role) {
-        this.role = role;
+    public Authority(UserRole userRole) {
+        this.userRole = userRole;
     }
 }
