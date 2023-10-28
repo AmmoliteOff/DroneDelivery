@@ -42,6 +42,8 @@ public class DroneDistributionService {
             Order order = orderService.findById(orders.get(key).getId()).get();
             routeMap.put(key, order.getId());
             order.setDrone(persistDrone);
+            order.setLongitude(orders.get(key).getLongitude());
+            order.setLatitude(orders.get(key).getLatitude());
             order.setOrderStatus(OrderStatus.ASSEMBLES);
             persistOrders.add(order);
             RequestToMarketplace.updateOrder(order);
@@ -98,6 +100,8 @@ public class DroneDistributionService {
         for (Order order: orders) {
             var c = Geocoding.getCoords(order.getCustomerAddress());
             coords.add(c);
+            order.setLatitude(c.getLatitude());
+            order.setLongitude(c.getLongitude());
             ordersMap.put(c, order);
         }
 

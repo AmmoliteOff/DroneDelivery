@@ -33,7 +33,7 @@ public class DroneService {
         return droneRepository.findById(id);
     }
 
-    public boolean sendDrone(Drone drone){
+    public boolean sendDrone(){
         sendRequest("sendDrone", null);
         return true; //edit
     }
