@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(RegisterRequest request) {
 
-        Authority authority = new Authority(request.getRole());
+        Authority authority = new Authority(request.getUserRole());
         if(userService.findByUsername(request.getUsername()).isEmpty()) {
             var user = User.builder()
                     .name(request.getName())
@@ -41,7 +40,7 @@ public class AuthenticationService {
             var jwtToken = jwtUtil.generateToken(user);
             return AuthenticationResponse.builder()
                     .token(jwtToken)
-                    .user(user)
+                    .userDTO(AuthenticationResponse.userToUserDTO(user))
                     .build();
         } else {
             return new AuthenticationResponse();
@@ -61,7 +60,7 @@ public class AuthenticationService {
         var jwtToken = jwtUtil.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
-                .user(user)
+                .userDTO(AuthenticationResponse.userToUserDTO(user))
                 .build();
 
     }
