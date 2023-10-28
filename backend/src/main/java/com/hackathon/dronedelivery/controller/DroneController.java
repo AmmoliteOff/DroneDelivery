@@ -27,16 +27,9 @@ public class DroneController {
         return ResponseEntity.ok(droneService.findAll());
     }
 
-    @PostMapping("/addDrone")
-    public ResponseEntity<?> addDrone(@RequestBody Drone drone) throws IOException, URISyntaxException {
-        droneService.save(drone);
-        droneDistributionService.addDrone(drone);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
     @PostMapping("/sendDrone")
-    public ResponseEntity<?> sendDrone(@RequestBody Drone drone){
-        droneService.sendDrone(drone);
+    public ResponseEntity<?> sendDrone(){
+        droneService.sendDrone();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -47,12 +40,13 @@ public class DroneController {
     }
 
     @PostMapping("/drones/new")
-    public ResponseEntity<Drone> addDrone(@RequestBody DroneDTO droneDTO) {
-        Drone drone = Drone.builder()
-                .charge(droneDTO.getCharge())
-                .maxWeight(droneDTO.getMaxWeight())
-                .fullChargeDistance(droneDTO.getFullChargeDistance())
-                .build();
-        return ResponseEntity.ok(droneService.save(drone));
+    public ResponseEntity<Drone> addDrone(@RequestBody DroneDTO droneDTO) throws IOException, URISyntaxException {
+        Drone drone = new Drone();
+        drone.setCharge(droneDTO.getCharge());
+        drone.setFullChargeDistance(droneDTO.getFullChargeDistance());
+        drone.setMaxWeight(droneDTO.getMaxWeight());
+        Drone savedDrone = droneService.save(drone);
+        droneDistributionService.addDrone(drone);
+        return ResponseEntity.ok(savedDrone);
     }
 }
