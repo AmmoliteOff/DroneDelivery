@@ -22,11 +22,6 @@ public class Request {
     @OneToOne(cascade = CascadeType.ALL)
     private Drone drone;
 
-    @Transient
-    @OneToMany
-    @JsonIgnore
-    private List<Order> orderList;
-
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
 }
